@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riverty Screensaver</title>
+    <style>
+        :root {
+            --bg-dark: #1d1f23;
+            --bg-light: #eef3f7;
+            --bg-green: #00d1a0;
+            --text-dark: #1d1f23;
+            --text-light: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top left, rgba(0, 209, 160, 0.3), transparent 50%),
+                        radial-gradient(circle at bottom right, rgba(29, 31, 35, 0.4), transparent 55%),
+                        var(--bg-dark);
+            color: var(--text-light);
+            overflow: hidden;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: clamp(1.5rem, 3vw, 4rem);
+            width: min(1000px, 90vw);
+            padding: clamp(1.5rem, 4vw, 3rem);
+            border-radius: 2rem;
+            background: rgba(12, 14, 18, 0.65);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.45);
+            position: relative;
+        }
+
+        main::before,
+        main::after {
+            content: "";
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            opacity: 0.18;
+            filter: blur(2px);
+            animation: float 12s infinite alternate ease-in-out;
+        }
+
+        main::before {
+            background: var(--bg-green);
+            top: -60px;
+            right: -40px;
+            animation-delay: 2s;
+        }
+
+        main::after {
+            background: var(--bg-light);
+            bottom: -80px;
+            left: -30px;
+        }
+
+        @keyframes float {
+            from { transform: translateY(-10px) scale(1); }
+            to { transform: translateY(30px) scale(1.1); }
+        }
+
+        .logo-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 209, 160, 0.25), transparent 65%);
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .logo-card:hover::before {
+            opacity: 1;
+        }
+
+        .logo-wrapper {
+            width: min(180px, 60vw);
+            aspect-ratio: 1;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+            border-radius: 50%;
+            animation: pulse 6s infinite ease-in-out;
+        }
+
+        .logo-wrapper.dark {
+            background: linear-gradient(145deg, rgba(0,0,0,0.8), rgba(29, 31, 35, 0.95));
+        }
+
+        .logo-wrapper.light {
+            background: linear-gradient(145deg, rgba(255,255,255,0.85), rgba(238, 243, 247, 0.95));
+        }
+
+        .logo-wrapper.green {
+            background: linear-gradient(145deg, rgba(0, 209, 160, 0.8), rgba(0, 209, 160, 0.95));
+        }
+
+        .logo-wrapper img {
+            width: 75%;
+            height: auto;
+            animation: spin 20s linear infinite;
+            filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.35));
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.95); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .caption {
+            text-align: center;
+            line-height: 1.6;
+            font-size: clamp(1rem, 1.6vw, 1.2rem);
+        }
+
+        .caption strong {
+            display: block;
+            font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+            margin-bottom: 0.4rem;
+        }
+
+        footer {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--text-muted);
+            animation: shimmer 5s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                background: var(--bg-dark);
+            }
+
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section class="logo-card">
+            <div class="logo-wrapper dark">
+                <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="Riverty Logo in dunkler Variante">
+            </div>
+            <p class="caption">
+                <strong>Mach kurz Pause.</strong>
+                Riverty hält die Stellung – inklusive Kaffeemaschine-Überwachung!
+            </p>
+        </section>
+        <section class="logo-card">
+            <div class="logo-wrapper light">
+                <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="Riverty Logo in heller Variante">
+            </div>
+            <p class="caption">
+                <strong>Der Überblick bleibt.</strong>
+                Deine To-dos schweben synchron wie dieser Looping – versprochen.
+            </p>
+        </section>
+        <section class="logo-card">
+            <div class="logo-wrapper green">
+                <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="Riverty Logo in grüner Variante">
+            </div>
+            <p class="caption">
+                <strong>Wir rechnen schon mal.</strong>
+                Kehre zurück, bevor das Team den Highscore im Fokus halten knackt.
+            </p>
+        </section>
+        <footer>Mach es dir bequem – Riverty hält alles im grünen Bereich.</footer>
+    </main>
+</body>
+</html>
