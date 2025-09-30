@@ -1,552 +1,398 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riverty Landschaft</title>
-    <style>
-        :root {
-            --sky-top: #91d0ff;
-            --sky-bottom: #e5f5ff;
-            --sun: #ffd46f;
-            --hill-1: #8fc08c;
-            --hill-2: #7bb582;
-            --hill-3: #6aa773;
-            --lake-top: rgba(132, 214, 228, 0.9);
-            --lake-bottom: rgba(55, 126, 149, 0.95);
-            --house-main: #f7f3eb;
-            --house-side: #ddebe2;
-            --roof: #d36f53;
-            --tree-trunk: #6d4c37;
-            --tree-crown: #3f8e61;
-            --text-primary: #0f2a37;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Riverty – Moderne Landschaft</title>
+  <style>
+    :root{
+      /* Palette – gedeckt & natürlich */
+      --sky-top:#b8d8f5;
+      --sky-bottom:#eef6fb;
+      --sun:#ffd889;
+      --mountain-far:#c7d6e3;
+      --mountain-mid:#a9c4d5;
+      --terrain:#89ad9a;
+      --terrain-dark:#6e9486;
+      --water-top:rgba(153,200,214,.9);
+      --water-mid:rgba(105,164,184,.92);
+      --water-bottom:rgba(64,120,140,.96);
+      --wood:#8c705a;
+      --glass:#ecf3f7;
+      --steel:#1f2a33;
+      --accent:#2b6f66;
+      --text:#0f2a37;
+      --shadow:rgba(15,42,55,.18);
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg,var(--sky-top),var(--sky-bottom));
+      overflow-x:hidden;
+    }
 
-        body {
-            font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-            background: #f0f6fa;
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-        }
+    /* Szene */
+    .scene{
+      position:relative;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      isolation:isolate;
+    }
 
-        .landscape {
-            position: relative;
-            flex: 1;
-            min-height: 100vh;
-            overflow: hidden;
-            background: linear-gradient(var(--sky-top) 0%, var(--sky-bottom) 64%, #a9e4f1 64%, #5da9ba 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
+    /* Himmel & Sonne */
+    .sky{
+      position:absolute; inset:0 0 36vh 0;
+      pointer-events:none;
+      background:
+        radial-gradient(1200px 600px at 20% 18%, rgba(255,255,255,.6), transparent 70%),
+        linear-gradient(180deg,var(--sky-top) 0%, var(--sky-bottom) 100%);
+      z-index:0;
+    }
+    .sun{
+      position:absolute;
+      top:clamp(5vh,9vw,10vh);
+      left:clamp(8vw,12vw,16vw);
+      width:clamp(90px,15vw,160px); aspect-ratio:1;
+      border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, #fffbe8 0%, var(--sun) 70%);
+      box-shadow:0 0 60px rgba(255,216,137,.55);
+      animation:sunPulse 10s ease-in-out infinite;
+    }
+    @keyframes sunPulse{
+      0%,100%{transform:scale(.97)}
+      50%{transform:scale(1.03)}
+    }
 
-        .sky-layer {
-            position: absolute;
-            inset: 0;
-            height: min(68vh, 520px);
-            pointer-events: none;
-        }
+    /* Ferne Gebirge – subtil statt Comic-Hügel */
+    .mountains{
+      position:absolute; inset:auto 0 38vh 0; height:28vh; z-index:1;
+    }
+    .layer{
+      position:absolute; inset:0; transform-origin:bottom;
+      filter:drop-shadow(0 18px 26px var(--shadow));
+    }
+    .layer.far{
+      background:
+        radial-gradient(120% 80% at 15% 120%, var(--mountain-far) 0 38%, transparent 40%),
+        radial-gradient(120% 80% at 55% 120%, var(--mountain-far) 0 42%, transparent 44%),
+        radial-gradient(120% 80% at 95% 120%, var(--mountain-far) 0 36%, transparent 38%);
+      opacity:.85;
+      transform:scaleY(.9);
+    }
+    .layer.mid{
+      background:
+        radial-gradient(120% 80% at 30% 120%, var(--mountain-mid) 0 40%, transparent 42%),
+        radial-gradient(120% 80% at 78% 120%, var(--mountain-mid) 0 44%, transparent 46%);
+      opacity:.95;
+      transform:translateY(2vh);
+    }
 
-        .sun {
-            position: absolute;
-            top: clamp(6vh, 8vw, 10vh);
-            left: clamp(8vw, 10vw, 14vw);
-            width: clamp(90px, 16vw, 180px);
-            aspect-ratio: 1;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #fff9e0 0%, var(--sun) 70%);
-            box-shadow: 0 0 60px rgba(255, 212, 111, 0.6);
-            animation: sunPulse 8s ease-in-out infinite;
-        }
+    /* Uferzone */
+    .fore-terrain{
+      position:absolute; inset:auto 0 30vh 0; height:14vh; z-index:3;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.2), transparent 60%) 0 0/100% 100% no-repeat,
+        radial-gradient(140% 140% at 50% -20%, var(--terrain) 0 60%, transparent 62%);
+      filter:drop-shadow(0 12px 20px var(--shadow));
+    }
 
-        @keyframes sunPulse {
-            0%, 100% {
-                transform: scale(0.95);
-                box-shadow: 0 0 50px rgba(255, 212, 111, 0.45);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 70px rgba(255, 212, 111, 0.75);
-            }
-        }
+    /* Schilf */
+    .reeds{
+      position:absolute; inset:auto 0 32vh 0; height:10vh; z-index:4; pointer-events:none;
+      mask-image:linear-gradient(90deg,transparent 0 5%, black 15% 85%, transparent 100%);
+    }
+    .reed{
+      position:absolute; bottom:0; width:2px; height:100%;
+      background:linear-gradient(180deg, var(--accent), #2f5a53);
+      transform-origin:bottom;
+      animation:reedSway 6s ease-in-out infinite;
+      box-shadow:0 0 0 1px rgba(255,255,255,.05) inset;
+    }
+    .reed::after{
+      content:""; position:absolute; bottom:30%; left:-4px;
+      width:10px; height:2px; background:#2f5a53; border-radius:2px;
+    }
+    @keyframes reedSway{
+      0%,100%{transform:skewX(-2deg)}
+      50%{transform:skewX(3deg)}
+    }
 
-        .cloud {
-            position: absolute;
-            left: -35vw;
-            display: inline-flex;
-            align-items: center;
-            gap: clamp(10px, 2vw, 22px);
-            padding: clamp(12px, 2vw, 18px) clamp(22px, 3.6vw, 38px);
-            min-width: clamp(140px, 24vw, 240px);
-            background: rgba(255, 255, 255, 0.88);
-            border-radius: 999px;
-            box-shadow: 0 20px 40px rgba(15, 42, 55, 0.12);
-            animation: cloudFloat 70s linear infinite;
-            will-change: transform;
-        }
+    /* See mit leichter Spiegelung */
+    .lake{
+      position:relative; z-index:2;
+      height:34vh; min-height:220px; overflow:hidden;
+      background:
+        linear-gradient(180deg, var(--water-top) 0%, var(--water-mid) 55%, var(--water-bottom) 100%);
+    }
+    .glare{
+      position:absolute; inset:0; pointer-events:none; opacity:.45;
+      background:
+        radial-gradient(160% 60% at 50% -10%, rgba(255,255,255,.35), transparent 55%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 14px, transparent 14px 28px);
+      animation:waterShift 14s linear infinite;
+      mix-blend-mode:screen;
+    }
+    @keyframes waterShift{
+      0%{transform:translateX(-8%)}
+      50%{transform:translateX(8%)}
+      100%{transform:translateX(-8%)}
+    }
 
-        .cloud::before,
-        .cloud::after {
-            content: "";
-            position: absolute;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-        }
+    /* Logos als Vögel */
+    .logo-birds{
+      position:absolute; inset:clamp(8vh,12vw,14vh) auto auto -18vw;
+      width:100vw; height:14vh; z-index:2; pointer-events:none;
+      animation:flockMove 36s linear infinite;
+    }
+    @keyframes flockMove{
+      0%{transform:translateX(0)}
+      100%{transform:translateX(140vw)}
+    }
+    .logo-bird{
+      position:absolute; width:clamp(36px,4.2vw,56px); height:clamp(18px,2.2vw,26px);
+      top:var(--y, 20%); left:var(--x, 0%);
+      transform:translate3d(0,0,0);
+      animation:birdBob 2.6s ease-in-out infinite;
+    }
+    @keyframes birdBob{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+    }
+    .wing{
+      position:absolute; top:50%; width:50%; height:100%; transform-origin:var(--origin);
+      display:block; filter:drop-shadow(0 6px 10px rgba(15,42,55,.2));
+      animation:wingFlap 1.8s ease-in-out infinite;
+    }
+    .wing img{width:100%; height:100%; object-fit:contain}
+    .wing.left{left:0; --origin:100% 50%}
+    .wing.right{right:0; --origin:0 50%; animation-direction:reverse}
+    @keyframes wingFlap{
+      0%,100%{transform:rotate(10deg) scaleX(1)}
+      50%{transform:rotate(-28deg) scaleX(.9)}
+    }
 
-        .cloud::before {
-            width: 70%;
-            height: 90%;
-            top: -55%;
-            left: 10%;
-        }
+    /* Leichte Wolken */
+    .cloud{
+      position:absolute; left:-30vw; top:clamp(6vh,12vw,16vh);
+      min-width:clamp(220px,28vw,360px); height:clamp(60px,8vw,90px);
+      background:rgba(255,255,255,.85);
+      border-radius:999px;
+      box-shadow:0 20px 40px rgba(15,42,55,.12);
+      filter:saturate(.9);
+      animation:cloudFloat 80s linear infinite;
+    }
+    .cloud::before,.cloud::after{
+      content:""; position:absolute; background:rgba(255,255,255,.9); border-radius:50%;
+    }
+    .cloud::before{width:48%; height:140%; left:8%; top:-50%}
+    .cloud::after{width:32%; height:100%; right:8%; bottom:-40%}
+    .cloud.two{top:clamp(10vh,16vw,20vh); animation-duration:95s; animation-delay:-30s}
+    .cloud.three{top:clamp(16vh,22vw,26vh); animation-duration:70s; animation-delay:-50s}
+    @keyframes cloudFloat{
+      0%{transform:translateX(0)}
+      100%{transform:translateX(170vw)}
+    }
 
-        .cloud::after {
-            width: 45%;
-            height: 60%;
-            bottom: -45%;
-            right: 8%;
-        }
+    /* Architektur – gläserner Pavillon */
+    .architecture{
+      position:absolute; inset:auto 0 33vh 0; z-index:5;
+      display:grid; place-items:end center;
+      pointer-events:none;
+    }
 
-        .cloud img {
-            height: clamp(34px, 6vw, 64px);
-            filter: drop-shadow(0 10px 18px rgba(44, 133, 116, 0.25));
-        }
+    .pavilion{
+      position:relative;
+      width:min(920px,88vw);
+      height:clamp(160px,26vw,260px);
+      display:grid; align-items:end;
+      filter:drop-shadow(0 22px 34px var(--shadow));
+      pointer-events:auto;
+    }
+    /* Auskragendes Dach */
+    .roof{
+      position:absolute; left:0; right:0; top:0;
+      height:clamp(14px,1.6vw,18px);
+      background:linear-gradient(180deg, #2c3944 0%, #1d2730 60%, #141b21 100%);
+      border-radius:10px;
+      transform:translateY(-6px);
+    }
+    .roof::after{
+      content:""; position:absolute; left:15%; right:8%; top:100%;
+      height:clamp(8px,1vw,12px);
+      background:linear-gradient(180deg, rgba(0,0,0,.18), transparent);
+      filter:blur(6px); opacity:.6;
+    }
 
-        .cloud-1 {
-            top: clamp(10vh, 18vw, 24vh);
-            animation-duration: 68s;
-            animation-delay: -20s;
-        }
+    /* Glasvolumen */
+    .glass{
+      width:100%; height:100%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,.06)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 1px, transparent 1px 22px),
+        linear-gradient(180deg, #9eb8c7 0%, #7ea3b3 45%, #6b99ac 60%, #5a8ba0 100%);
+      border:1px solid rgba(255,255,255,.28);
+      border-radius:14px;
+      overflow:hidden;
+      position:relative;
+    }
+    /* Holzlamellen */
+    .wood-skin{
+      position:absolute; left:0; bottom:0; top:18%;
+      width:clamp(140px,22vw,240px); border-top-left-radius:14px; border-bottom-left-radius:14px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,0)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 12px),
+        linear-gradient(180deg, #a4866f, var(--wood));
+      box-shadow:inset -12px 0 18px rgba(0,0,0,.15);
+    }
+    /* Steg */
+    .deck{
+      position:absolute; right:6%; bottom:-6%;
+      width:clamp(180px,28vw,340px); height:clamp(14px,1.8vw,18px);
+      background:linear-gradient(180deg, #a7876f, #8c705a);
+      border-radius:10px;
+      box-shadow:0 10px 20px rgba(15,42,55,.25);
+    }
+    .deck::after{
+      content:""; position:absolute; inset:0;
+      background:repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 2px, transparent 2px 16px);
+      border-radius:10px;
+      opacity:.7;
+    }
 
-        .cloud-2 {
-            top: clamp(6vh, 14vw, 18vh);
-            animation-duration: 82s;
-            animation-delay: -38s;
-        }
+    /* Dezentes Fassaden-Logo (nicht dominant) */
+    .facade-logo{
+      position:absolute; right:12%; top:16%;
+      width:clamp(54px,7vw,84px); aspect-ratio:1;
+      opacity:.22; filter:contrast(1.1) saturate(.9);
+    }
 
-        .cloud-3 {
-            top: clamp(20vh, 26vw, 30vh);
-            animation-duration: 60s;
-            animation-delay: -50s;
-        }
+    /* Tagline */
+    .tagline{
+      position:relative; z-index:6;
+      text-align:center;
+      font-size:clamp(.95rem,1.6vw,1.1rem);
+      padding:clamp(1.2rem,2.5vw,2rem) 1rem clamp(2rem,4vw,3rem);
+      color:rgba(15,42,55,.9);
+    }
 
-        @keyframes cloudFloat {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(170vw); }
-        }
+    /* Reduced Motion */
+    @media (prefers-reduced-motion:reduce){
+      *,:before,:after{animation-duration:1ms !important; animation-iteration-count:1 !important}
+    }
 
-        .birds {
-            position: absolute;
-            top: clamp(16vh, 22vw, 28vh);
-            left: -15vw;
-            display: flex;
-            gap: clamp(16px, 3vw, 32px);
-            animation: birdsFlight 34s linear infinite;
-        }
-
-        .birds span {
-            position: relative;
-            display: block;
-            width: clamp(28px, 4vw, 44px);
-            height: clamp(12px, 2vw, 20px);
-        }
-
-        .birds span::before,
-        .birds span::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 50%;
-            height: 50%;
-            border-top: clamp(2px, 0.5vw, 3px) solid rgba(15, 42, 55, 0.65);
-            border-radius: 50%;
-        }
-
-        .birds span::before {
-            left: 0;
-            transform-origin: 100% 50%;
-            animation: wingFlap 1.8s ease-in-out infinite;
-        }
-
-        .birds span::after {
-            right: 0;
-            transform-origin: 0 50%;
-            animation: wingFlap 1.8s ease-in-out infinite reverse;
-        }
-
-        @keyframes birdsFlight {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(180vw); }
-        }
-
-        @keyframes wingFlap {
-            0%, 100% { transform: rotate(12deg) scaleX(1); }
-            50% { transform: rotate(-28deg) scaleX(0.85); }
-        }
-
-        .ground {
-            position: relative;
-            z-index: 2;
-            padding: clamp(6rem, 9vw, 8rem) clamp(1.5rem, 4vw, 3rem) clamp(8rem, 12vw, 10rem);
-        }
-
-        .hill {
-            position: absolute;
-            bottom: clamp(6rem, 8vw, 9rem);
-            border-radius: 50% 50% 0 0;
-            filter: drop-shadow(0 24px 32px rgba(15, 42, 55, 0.18));
-        }
-
-        .hill-left {
-            left: -20%;
-            width: clamp(320px, 55vw, 620px);
-            height: clamp(200px, 32vw, 320px);
-            background: linear-gradient(180deg, #a2d49e 0%, var(--hill-1) 75%);
-        }
-
-        .hill-right {
-            right: -16%;
-            width: clamp(280px, 48vw, 560px);
-            height: clamp(180px, 28vw, 300px);
-            background: linear-gradient(180deg, #8dc492 0%, var(--hill-2) 80%);
-        }
-
-        .hill-center {
-            left: 50%;
-            transform: translateX(-50%);
-            width: clamp(360px, 60vw, 680px);
-            height: clamp(220px, 36vw, 360px);
-            background: linear-gradient(180deg, #7fb685 0%, var(--hill-3) 78%);
-        }
-
-        .village {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            gap: clamp(2rem, 5vw, 6rem);
-            align-items: flex-end;
-            margin-inline: auto;
-            max-width: min(800px, 90vw);
-        }
-
-        .house {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: clamp(0.6rem, 1.5vw, 1rem);
-            z-index: 3;
-            animation: houseBreathe 9s ease-in-out infinite;
-        }
-
-        .house::after {
-            content: "";
-            position: absolute;
-            inset: auto 10% -18%;
-            height: clamp(10px, 1.8vw, 16px);
-            border-radius: 50%;
-            background: rgba(15, 42, 55, 0.22);
-            filter: blur(6px);
-            z-index: -1;
-        }
-
-        @keyframes houseBreathe {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-
-        .roof {
-            width: clamp(120px, 18vw, 200px);
-            height: clamp(40px, 6vw, 70px);
-            background: var(--roof);
-            clip-path: polygon(50% 0, 100% 100%, 0 100%);
-            box-shadow: 0 10px 18px rgba(211, 111, 83, 0.35);
-        }
-
-        .wall {
-            position: relative;
-            width: clamp(130px, 20vw, 220px);
-            padding: clamp(1.2rem, 2.5vw, 2rem) clamp(1rem, 2vw, 1.6rem);
-            border-radius: 1.2rem;
-            background: var(--house-main);
-            box-shadow: 0 22px 30px rgba(15, 42, 55, 0.18);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: clamp(0.8rem, 1.6vw, 1.2rem);
-        }
-
-        .wall img {
-            width: clamp(80px, 12vw, 150px);
-        }
-
-        .windows {
-            display: flex;
-            gap: clamp(0.8rem, 1.6vw, 1.4rem);
-        }
-
-        .window {
-            width: clamp(20px, 4vw, 36px);
-            height: clamp(28px, 5vw, 48px);
-            border-radius: 0.6rem;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(170, 220, 235, 0.9) 100%);
-            box-shadow: inset 0 0 6px rgba(15, 42, 55, 0.18);
-        }
-
-        .door {
-            width: clamp(38px, 5vw, 60px);
-            height: clamp(54px, 8vw, 80px);
-            border-radius: 0.8rem 0.8rem 0.4rem 0.4rem;
-            background: linear-gradient(180deg, #c2cfd8 0%, #8ba1b0 100%);
-        }
-
-        .house-side .roof {
-            width: clamp(90px, 14vw, 150px);
-            height: clamp(34px, 5vw, 60px);
-        }
-
-        .house-side .wall {
-            width: clamp(100px, 16vw, 180px);
-            background: var(--house-side);
-            padding-block: clamp(1rem, 2vw, 1.6rem);
-        }
-
-        .house-side .chimney {
-            position: absolute;
-            right: clamp(12px, 2vw, 18px);
-            top: clamp(-30px, -5vw, -22px);
-            width: clamp(18px, 2.5vw, 26px);
-            height: clamp(36px, 4.8vw, 48px);
-            border-radius: 0.4rem 0.4rem 0 0;
-            background: linear-gradient(180deg, #c9795e 0%, #b06147 100%);
-            box-shadow: 0 6px 10px rgba(15, 42, 55, 0.2);
-        }
-
-        .house-side .window-round {
-            width: clamp(36px, 6vw, 60px);
-            aspect-ratio: 1;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(160, 210, 230, 0.9) 70%);
-            box-shadow: inset 0 0 6px rgba(15, 42, 55, 0.18);
-        }
-
-        .tree {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            bottom: clamp(7.5rem, 11vw, 12rem);
-            animation: treeSway 7s ease-in-out infinite;
-        }
-
-        .tree-left { left: clamp(6vw, 10vw, 12vw); }
-        .tree-right { right: clamp(10vw, 12vw, 16vw); animation-delay: 1.5s; }
-
-        @keyframes treeSway {
-            0%, 100% { transform: rotate(-1deg) translateY(0); }
-            50% { transform: rotate(2deg) translateY(-4px); }
-        }
-
-        .trunk {
-            width: clamp(14px, 1.6vw, 18px);
-            height: clamp(60px, 10vw, 90px);
-            background: linear-gradient(180deg, #835f46 0%, var(--tree-trunk) 100%);
-            border-radius: 0.4rem;
-        }
-
-        .crown {
-            width: clamp(90px, 14vw, 140px);
-            height: clamp(90px, 14vw, 140px);
-            border-radius: 50% 50% 45% 45%;
-            background: radial-gradient(circle at 30% 30%, #6cc28a 0%, var(--tree-crown) 70%);
-            box-shadow: inset -12px -18px 0 rgba(45, 108, 75, 0.35);
-            margin-bottom: clamp(-30px, -4vw, -24px);
-        }
-
-        .lake {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            height: clamp(220px, 32vw, 360px);
-            margin-top: clamp(-6rem, -8vw, -5rem);
-            background: linear-gradient(180deg, var(--lake-top) 0%, rgba(87, 168, 186, 0.92) 50%, var(--lake-bottom) 100%);
-            overflow: hidden;
-        }
-
-        .lake::before {
-            content: "";
-            position: absolute;
-            inset: -40% 0 auto;
-            height: 100%;
-            background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
-            animation: lakeShimmer 14s linear infinite;
-        }
-
-        @keyframes lakeShimmer {
-            0% { transform: translateX(-20%); opacity: 0.45; }
-            50% { transform: translateX(20%); opacity: 0.65; }
-            100% { transform: translateX(-20%); opacity: 0.45; }
-        }
-
-        .logo-reflection {
-            position: absolute;
-            top: clamp(2.6rem, 6vw, 5rem);
-            left: 50%;
-            transform: translateX(-50%) scaleY(-1);
-            opacity: 0.4;
-            filter: blur(1.5px);
-            animation: rippleLogo 10s ease-in-out infinite;
-        }
-
-        .logo-reflection img {
-            width: clamp(90px, 14vw, 160px);
-        }
-
-        @keyframes rippleLogo {
-            0%, 100% { transform: translateX(-50%) scaleY(-1) scale(0.98); }
-            50% { transform: translateX(-50%) scaleY(-1.02) scale(1.02); }
-        }
-
-        .ripples {
-            position: absolute;
-            left: 50%;
-            width: clamp(180px, 30vw, 320px);
-            aspect-ratio: 3 / 1;
-            border: clamp(2px, 0.6vw, 4px) solid rgba(255, 255, 255, 0.28);
-            border-radius: 50%;
-            transform: translateX(-50%);
-            animation: ripple 12s linear infinite;
-        }
-
-        .ripple-1 { top: clamp(3.5rem, 8vw, 6.8rem); }
-        .ripple-2 { top: clamp(5.5rem, 11vw, 9.4rem); animation-delay: -4s; }
-
-        @keyframes ripple {
-            0% { transform: translateX(-50%) scale(0.8); opacity: 0.45; }
-            70% { opacity: 0.12; }
-            100% { transform: translateX(-50%) scale(1.25); opacity: 0; }
-        }
-
-        .tagline {
-            position: relative;
-            z-index: 3;
-            text-align: center;
-            font-size: clamp(0.9rem, 1.8vw, 1.1rem);
-            padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2rem) clamp(2.5rem, 5vw, 3rem);
-            color: rgba(15, 42, 55, 0.85);
-            text-shadow: 0 2px 6px rgba(255, 255, 255, 0.6);
-        }
-
-        @media (max-width: 720px) {
-            .ground {
-                padding-bottom: clamp(6rem, 14vw, 8rem);
-            }
-
-            .hill {
-                bottom: clamp(5rem, 14vw, 7rem);
-            }
-
-            .tree {
-                bottom: clamp(6rem, 14vw, 9rem);
-            }
-
-            .lake {
-                margin-top: clamp(-4rem, -10vw, -3rem);
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 1ms !important;
-                animation-iteration-count: 1 !important;
-            }
-        }
-    </style>
+    /* Responsiv feinjustieren */
+    @media (max-width:720px){
+      .mountains{inset:auto 0 40vh 0;height:26vh}
+      .lake{height:36vh}
+      .architecture{inset:auto 0 35vh 0}
+      .deck{right:4%}
+    }
+  </style>
 </head>
 <body>
-    <main class="landscape" aria-label="Animierte Riverty-Landschaft">
-        <div class="sky-layer">
-            <div class="sun" aria-hidden="true"></div>
-            <div class="cloud cloud-1">
-                <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="Riverty Logo als leichte Wolke">
-            </div>
-            <div class="cloud cloud-2" aria-hidden="true"></div>
-            <div class="cloud cloud-3" aria-hidden="true"></div>
-            <div class="birds" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+  <main class="scene" aria-label="Moderne Riverty-Landschaft mit Architektur und See">
+    <!-- Himmel -->
+    <div class="sky" aria-hidden="true">
+      <div class="sun" aria-hidden="true"></div>
+      <div class="cloud one" aria-hidden="true"></div>
+      <div class="cloud two" aria-hidden="true"></div>
+      <div class="cloud three" aria-hidden="true"></div>
+    </div>
+
+    <!-- Berge/Ebenen -->
+    <div class="mountains" aria-hidden="true">
+      <div class="layer far"></div>
+      <div class="layer mid"></div>
+    </div>
+
+    <!-- Architektur -->
+    <section class="architecture" aria-label="Moderner Pavillon am See">
+      <figure class="pavilion" role="img" aria-label="Glaspavillon mit Holzlamellen und Steg">
+        <div class="roof" aria-hidden="true"></div>
+        <div class="glass">
+          <div class="wood-skin" aria-hidden="true"></div>
+          <img class="facade-logo" src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg"
+               alt="Riverty-Logomark subtil auf der Glasfassade">
         </div>
+        <div class="deck" aria-hidden="true"></div>
+      </figure>
+    </section>
 
-        <div class="ground">
-            <div class="hill hill-left" aria-hidden="true"></div>
-            <div class="hill hill-right" aria-hidden="true"></div>
-            <div class="hill hill-center" aria-hidden="true"></div>
+    <!-- Schilf/Ufer -->
+    <div class="fore-terrain" aria-hidden="true"></div>
+    <div class="reeds" aria-hidden="true">
+      <!-- einige Halme, verteilt -->
+      <span class="reed" style="left:10%; animation-delay:-.3s; height:85%"></span>
+      <span class="reed" style="left:14%; animation-delay:-1.1s; height:100%"></span>
+      <span class="reed" style="left:18%; animation-delay:-.6s; height:70%"></span>
+      <span class="reed" style="left:46%; animation-delay:-.8s; height:80%"></span>
+      <span class="reed" style="left:52%; animation-delay:-1.4s; height:95%"></span>
+      <span class="reed" style="left:58%; animation-delay:-.2s; height:76%"></span>
+      <span class="reed" style="left:78%; animation-delay:-1.0s; height:88%"></span>
+      <span class="reed" style="left:84%; animation-delay:-.5s; height:72%"></span>
+    </div>
 
-            <div class="tree tree-left" aria-hidden="true">
-                <span class="crown" aria-hidden="true"></span>
-                <span class="trunk" aria-hidden="true"></span>
-            </div>
-            <div class="tree tree-right" aria-hidden="true">
-                <span class="crown" aria-hidden="true"></span>
-                <span class="trunk" aria-hidden="true"></span>
-            </div>
+    <!-- See -->
+    <div class="lake" role="img" aria-label="Ruhiger See mit leichter Spiegelung">
+      <div class="glare" aria-hidden="true"></div>
+    </div>
 
-            <div class="village">
-                <article class="house house-side" aria-label="Kleines Haus am See">
-                    <div class="chimney" aria-hidden="true"></div>
-                    <div class="roof" aria-hidden="true"></div>
-                    <div class="wall">
-                        <div class="window-round" aria-hidden="true"></div>
-                        <div class="windows" aria-hidden="true">
-                            <span class="window"></span>
-                        </div>
-                        <div class="door" aria-hidden="true"></div>
-                    </div>
-                </article>
+    <!-- Logos als stilisierte Vogelschar -->
+    <div class="logo-birds" aria-label="Vogelschar aus Riverty-Logos">
+      <!-- Vogel 1 -->
+      <div class="logo-bird" style="--x:6%; --y:18%">
+        <span class="wing left">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="" aria-hidden="true">
+        </span>
+        <span class="wing right">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="" aria-hidden="true">
+        </span>
+      </div>
+      <!-- Vogel 2 -->
+      <div class="logo-bird" style="--x:0%; --y:42%; animation-delay:-.6s">
+        <span class="wing left">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="" aria-hidden="true">
+        </span>
+        <span class="wing right">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="" aria-hidden="true">
+        </span>
+      </div>
+      <!-- Vogel 3 -->
+      <div class="logo-bird" style="--x:12%; --y:30%; animation-delay:-1.1s">
+        <span class="wing left">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="" aria-hidden="true">
+        </span>
+        <span class="wing right">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="" aria-hidden="true">
+        </span>
+      </div>
+      <!-- Vogel 4 -->
+      <div class="logo-bird" style="--x:4%; --y:60%; animation-delay:-.2s">
+        <span class="wing left">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="" aria-hidden="true">
+        </span>
+        <span class="wing right">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="" aria-hidden="true">
+        </span>
+      </div>
+      <!-- Vogel 5 -->
+      <div class="logo-bird" style="--x:18%; --y:50%; animation-delay:-.9s">
+        <span class="wing left">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="" aria-hidden="true">
+        </span>
+        <span class="wing right">
+          <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="" aria-hidden="true">
+        </span>
+      </div>
+    </div>
 
-                <article class="house house-main" aria-label="Haupthaus mit Riverty Fassadenlogo">
-                    <div class="roof" aria-hidden="true"></div>
-                    <div class="wall">
-                        <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="Riverty Logo auf der Hausfassade">
-                        <div class="windows" aria-hidden="true">
-                            <span class="window"></span>
-                            <span class="window"></span>
-                        </div>
-                        <div class="door" aria-hidden="true"></div>
-                    </div>
-                </article>
-
-                <article class="house house-side" aria-label="Modernes Pavillonhaus">
-                    <div class="roof" aria-hidden="true"></div>
-                    <div class="wall">
-                        <div class="windows" aria-hidden="true">
-                            <span class="window"></span>
-                            <span class="window"></span>
-                        </div>
-                        <div class="door" aria-hidden="true"></div>
-                    </div>
-                </article>
-            </div>
-        </div>
-
-        <div class="lake">
-            <div class="logo-reflection">
-                <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="Spiegelung des Riverty Logos im See">
-            </div>
-            <div class="ripples ripple-1"></div>
-            <div class="ripples ripple-2"></div>
-        </div>
-
-        <p class="tagline">Ein stiller Moment für dich – Riverty behält den Überblick über Wellen, Wind und Wohlgefühl.</p>
-    </main>
+    <p class="tagline">Ruhig. Präzise. Modern – Riverty hält Kurs zwischen Architektur und Natur.</p>
+  </main>
 </body>
 </html>
