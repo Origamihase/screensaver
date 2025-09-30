@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riverty Screensaver</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
         :root {
-            --bg-dark: #1d1f23;
-            --bg-light: #eef3f7;
-            --bg-green: #00d1a0;
-            --text-dark: #1d1f23;
-            --text-light: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.8);
+            --matrix-bg: #020a06;
+            --matrix-green: #2bff88;
+            --matrix-glow: rgba(43, 255, 136, 0.6);
+            --accent-yellow: #f7d354;
+            --ghost-body: #ff7ad3;
+            --ghost-dark: #d94fb1;
+            --text-primary: #d1ffe7;
         }
 
         * {
@@ -21,194 +24,304 @@
         }
 
         body {
-            font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+            font-family: "Share Tech Mono", "Inter", "Helvetica Neue", Arial, sans-serif;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at top left, rgba(0, 209, 160, 0.3), transparent 50%),
-                        radial-gradient(circle at bottom right, rgba(29, 31, 35, 0.4), transparent 55%),
-                        var(--bg-dark);
-            color: var(--text-light);
+            background: radial-gradient(circle at 20% -10%, rgba(0, 255, 170, 0.15), transparent 60%),
+                        radial-gradient(circle at 80% 120%, rgba(0, 120, 80, 0.35), transparent 65%),
+                        var(--matrix-bg);
+            color: var(--text-primary);
             overflow: hidden;
         }
 
-        main {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: clamp(1.5rem, 3vw, 4rem);
-            width: min(1000px, 90vw);
-            padding: clamp(1.5rem, 4vw, 3rem);
-            border-radius: 2rem;
-            background: rgba(12, 14, 18, 0.65);
-            backdrop-filter: blur(18px);
-            box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.45);
+        .scene {
             position: relative;
-        }
-
-        main::before,
-        main::after {
-            content: "";
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            opacity: 0.18;
-            filter: blur(2px);
-            animation: float 12s infinite alternate ease-in-out;
-        }
-
-        main::before {
-            background: var(--bg-green);
-            top: -60px;
-            right: -40px;
-            animation-delay: 2s;
-        }
-
-        main::after {
-            background: var(--bg-light);
-            bottom: -80px;
-            left: -30px;
-        }
-
-        @keyframes float {
-            from { transform: translateY(-10px) scale(1); }
-            to { transform: translateY(30px) scale(1.1); }
-        }
-
-        .logo-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 1.5rem;
-            padding: clamp(1.5rem, 3vw, 2.5rem);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1.5rem;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            padding: clamp(1.5rem, 4vw, 4rem);
         }
 
-        .logo-card::before {
+        .matrix-rain {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .matrix-rain::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(0, 209, 160, 0.25), transparent 65%);
-            opacity: 0;
-            transition: opacity 0.8s ease;
+            background: linear-gradient(to bottom, rgba(2, 10, 6, 0), rgba(2, 10, 6, 0.65) 65%, rgba(2, 10, 6, 0.95));
         }
 
-        .logo-card:hover::before {
-            opacity: 1;
+        .matrix-rain span {
+            position: absolute;
+            top: -130%;
+            left: calc(var(--i) * 5%);
+            font-size: clamp(0.9rem, 2vw, 1.35rem);
+            font-weight: 400;
+            letter-spacing: 0.2rem;
+            color: var(--matrix-green);
+            text-shadow: 0 0 12px var(--matrix-glow), 0 0 22px rgba(43, 255, 136, 0.35);
+            opacity: calc(0.35 + (var(--i) * 0.02));
+            white-space: pre;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            animation: matrix-fall calc(7s + (var(--i) * 0.2s)) linear infinite;
+            animation-delay: calc(var(--i) * -0.45s);
         }
 
-        .logo-wrapper {
-            width: min(180px, 60vw);
-            aspect-ratio: 1;
+        @keyframes matrix-fall {
+            0% { transform: translate3d(0, -5%, 0); }
+            100% { transform: translate3d(0, 140%, 0); }
+        }
+
+        .hero-message {
+            position: relative;
+            max-width: min(900px, 90vw);
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            border: 1px solid rgba(43, 255, 136, 0.35);
+            border-radius: 1.5rem;
+            background: rgba(2, 10, 6, 0.55);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+            z-index: 2;
+        }
+
+        .hero-message h1 {
+            font-size: clamp(2rem, 5vw, 3.6rem);
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-message p {
+            font-size: clamp(1rem, 2.3vw, 1.35rem);
+            line-height: 1.7;
+            color: rgba(209, 255, 231, 0.9);
+        }
+
+        .hero-message strong {
+            color: var(--matrix-green);
+        }
+
+        .powerups {
+            position: relative;
+            display: flex;
+            gap: clamp(1rem, 4vw, 3rem);
+            margin-top: clamp(1.5rem, 4vw, 3rem);
+            z-index: 2;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .powerup {
+            width: clamp(90px, 12vw, 140px);
+            height: clamp(90px, 12vw, 140px);
             display: grid;
             place-items: center;
-            padding: 1rem;
             border-radius: 50%;
-            animation: pulse 6s infinite ease-in-out;
+            background: rgba(2, 10, 6, 0.6);
+            border: 1px solid rgba(43, 255, 136, 0.35);
+            box-shadow: 0 0 18px rgba(43, 255, 136, 0.3);
+            animation: floaty 8s ease-in-out infinite;
         }
 
-        .logo-wrapper.dark {
-            background: linear-gradient(145deg, rgba(0,0,0,0.8), rgba(29, 31, 35, 0.95));
+        .powerup img {
+            width: 70%;
+            filter: drop-shadow(0 0 0.6rem rgba(43, 255, 136, 0.3));
         }
 
-        .logo-wrapper.light {
-            background: linear-gradient(145deg, rgba(255,255,255,0.85), rgba(238, 243, 247, 0.95));
+        .powerup:nth-child(2) { animation-delay: 1.5s; }
+        .powerup:nth-child(3) { animation-delay: 3s; }
+
+        @keyframes floaty {
+            0%, 100% { transform: translateY(0) scale(0.95); }
+            50% { transform: translateY(-18px) scale(1.05); }
         }
 
-        .logo-wrapper.green {
-            background: linear-gradient(145deg, rgba(0, 209, 160, 0.8), rgba(0, 209, 160, 0.95));
+        .chase {
+            position: absolute;
+            bottom: 12vh;
+            left: 5vw;
+            width: 90vw;
+            max-width: 1100px;
+            height: 140px;
+            z-index: 1;
         }
 
-        .logo-wrapper img {
-            width: 75%;
-            height: auto;
-            animation: spin 20s linear infinite;
-            filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.35));
+        .pacman {
+            position: absolute;
+            width: clamp(70px, 10vw, 110px);
+            aspect-ratio: 1;
+            background: var(--accent-yellow);
+            border-radius: 50%;
+            filter: drop-shadow(0 0 0.8rem rgba(247, 211, 84, 0.5));
+            animation: pac-path 11s linear infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(0.95); }
-            50% { transform: scale(1.05); }
+        .pacman::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--matrix-bg);
+            clip-path: polygon(50% 50%, 100% 0%, 100% 100%);
+            transform-origin: 50% 50%;
+            animation: pac-chomp 0.38s infinite ease-in-out;
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes pac-chomp {
+            0% { transform: rotate(22deg); }
+            50% { transform: rotate(0deg); }
+            100% { transform: rotate(22deg); }
         }
 
-        .caption {
-            text-align: center;
-            line-height: 1.6;
-            font-size: clamp(1rem, 1.6vw, 1.2rem);
+        @keyframes pac-path {
+            0% { transform: translate3d(-12%, 0, 0); }
+            30% { transform: translate3d(32%, -30px, 0); }
+            45% { transform: translate3d(78%, -10px, 0); }
+            50% { transform: translate3d(82%, -6px, 0) scaleX(-1); }
+            80% { transform: translate3d(10%, 25px, 0) scaleX(-1); }
+            100% { transform: translate3d(-12%, 0, 0) scaleX(1); }
         }
 
-        .caption strong {
-            display: block;
-            font-size: clamp(1.25rem, 2.2vw, 1.6rem);
-            margin-bottom: 0.4rem;
+        .ghost {
+            position: absolute;
+            width: clamp(65px, 8.5vw, 95px);
+            height: clamp(70px, 9vw, 110px);
+            background: linear-gradient(180deg, var(--ghost-body) 0%, var(--ghost-dark) 70%);
+            border-radius: 45% 45% 35% 35%;
+            animation: ghost-path 11s linear infinite;
+            animation-delay: 0.55s;
+            filter: drop-shadow(0 0 0.7rem rgba(255, 122, 211, 0.4));
         }
 
-        footer {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-top: 0.5rem;
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            color: var(--text-muted);
-            animation: shimmer 5s linear infinite;
+        .ghost::before {
+            content: "";
+            position: absolute;
+            inset: 58% 0 0;
+            background:
+                radial-gradient(circle at 16% 50%, var(--matrix-bg) 30%, transparent 31%),
+                radial-gradient(circle at 50% 50%, var(--matrix-bg) 30%, transparent 31%),
+                radial-gradient(circle at 84% 50%, var(--matrix-bg) 30%, transparent 31%);
+            background-size: 34% 50%;
+            background-repeat: repeat-x;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 66% 82%, 50% 100%, 33% 82%, 16% 100%, 0 82%);
         }
 
-        @keyframes shimmer {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
+        .ghost-eyes {
+            position: absolute;
+            top: 28%;
+            left: 50%;
+            width: 70%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateX(-50%);
         }
 
-        @media (max-width: 600px) {
-            body {
-                background: var(--bg-dark);
-            }
+        .ghost-eye {
+            width: 28%;
+            aspect-ratio: 1;
+            background: #ffffff;
+            border-radius: 50%;
+            position: relative;
+        }
 
-            main {
-                grid-template-columns: 1fr;
-            }
+        .ghost-eye::after {
+            content: "";
+            position: absolute;
+            width: 45%;
+            height: 45%;
+            background: #0b2042;
+            border-radius: 50%;
+            top: 45%;
+            left: 55%;
+        }
+
+        @keyframes ghost-path {
+            0% { transform: translate3d(-20%, 10px, 0); }
+            25% { transform: translate3d(20%, -12px, 0); }
+            45% { transform: translate3d(65%, 0, 0); }
+            50% { transform: translate3d(72%, 6px, 0) scaleX(-1); }
+            75% { transform: translate3d(12%, 28px, 0) scaleX(-1); }
+            100% { transform: translate3d(-20%, 10px, 0) scaleX(1); }
+        }
+
+        .footer-note {
+            margin-top: clamp(2rem, 4vw, 3.5rem);
+            font-size: clamp(0.85rem, 2vw, 1.05rem);
+            color: rgba(209, 255, 231, 0.7);
+            letter-spacing: 0.08rem;
+            z-index: 2;
+        }
+
+        @media (max-width: 680px) {
+            .chase { bottom: 16vh; }
+            .matrix-rain span { left: calc(var(--i) * 7%); }
         }
     </style>
 </head>
 <body>
-    <main>
-        <section class="logo-card">
-            <div class="logo-wrapper dark">
-                <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="Riverty Logo in dunkler Variante">
-            </div>
-            <p class="caption">
-                <strong>Mach kurz Pause.</strong>
-                Riverty hält die Stellung – inklusive Kaffeemaschine-Überwachung!
+    <div class="scene">
+        <div class="matrix-rain">
+            <span style="--i:0">010011000101101001001101</span>
+            <span style="--i:1">R1V3RTY0101100010101</span>
+            <span style="--i:2">001101010101110100101</span>
+            <span style="--i:3">Λ01011001Ψ0011001</span>
+            <span style="--i:4">1010Σ101RVTY0110</span>
+            <span style="--i:5">00110101001100101011</span>
+            <span style="--i:6">₿0101RIVERTY101011</span>
+            <span style="--i:7">01010011001010111001</span>
+            <span style="--i:8">₪0110010101Γ0101</span>
+            <span style="--i:9">1010010110010101</span>
+            <span style="--i:10">010101010011011001</span>
+            <span style="--i:11">RVTY010110011001</span>
+            <span style="--i:12">011001010101010011</span>
+            <span style="--i:13">101Σ0101010011</span>
+            <span style="--i:14">Λ010101010010101</span>
+            <span style="--i:15">010010110010101</span>
+            <span style="--i:16">R1V3RTY01001011</span>
+            <span style="--i:17">0101010011001011</span>
+            <span style="--i:18">0101100101010101</span>
+            <span style="--i:19">101001011010010</span>
+        </div>
+
+        <div class="hero-message">
+            <h1>Riverty // Enter the Pac-Trix</h1>
+            <p>
+                Während draußen der Code-Regen rauscht, snackt Pac-Man sich durch die Datenkolonnen.
+                <strong>Riverty bleibt ganz gechillt im Hintergrund</strong> und hält dir die Matrix-Tür offen,
+                bis du den Highscore auf GitHub-Pages weiterjagst.
             </p>
-        </section>
-        <section class="logo-card">
-            <div class="logo-wrapper light">
-                <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="Riverty Logo in heller Variante">
+        </div>
+
+        <div class="powerups">
+            <div class="powerup" aria-hidden="true">
+                <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="Riverty Power-Up Dunkel">
             </div>
-            <p class="caption">
-                <strong>Der Überblick bleibt.</strong>
-                Deine To-dos schweben synchron wie dieser Looping – versprochen.
-            </p>
-        </section>
-        <section class="logo-card">
-            <div class="logo-wrapper green">
-                <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="Riverty Logo in grüner Variante">
+            <div class="powerup" aria-hidden="true">
+                <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="Riverty Power-Up Hell">
             </div>
-            <p class="caption">
-                <strong>Wir rechnen schon mal.</strong>
-                Kehre zurück, bevor das Team den Highscore im Fokus halten knackt.
-            </p>
-        </section>
-        <footer>Mach es dir bequem – Riverty hält alles im grünen Bereich.</footer>
-    </main>
+            <div class="powerup" aria-hidden="true">
+                <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="Riverty Power-Up Grün">
+            </div>
+        </div>
+
+        <div class="chase" aria-hidden="true">
+            <div class="pacman"></div>
+            <div class="ghost">
+                <div class="ghost-eyes">
+                    <div class="ghost-eye"></div>
+                    <div class="ghost-eye"></div>
+                </div>
+            </div>
+        </div>
+
+        <p class="footer-note">Hinterlasse ruhig einen Trace in der Matrix – Riverty passt derweil auf deine Credits auf.</p>
+    </div>
 </body>
 </html>
