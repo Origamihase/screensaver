@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riverty Screensaver</title>
+    <title>Riverty Landschaft</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
         :root {
-            --matrix-bg: #020a06;
-            --matrix-green: #2bff88;
-            --matrix-glow: rgba(43, 255, 136, 0.6);
-            --accent-yellow: #f7d354;
-            --ghost-body: #ff7ad3;
-            --ghost-dark: #d94fb1;
-            --text-primary: #d1ffe7;
+            --sky-top: #91d0ff;
+            --sky-bottom: #e5f5ff;
+            --sun: #ffd46f;
+            --hill-1: #8fc08c;
+            --hill-2: #7bb582;
+            --hill-3: #6aa773;
+            --lake-top: rgba(132, 214, 228, 0.9);
+            --lake-bottom: rgba(55, 126, 149, 0.95);
+            --house-main: #f7f3eb;
+            --house-side: #ddebe2;
+            --roof: #d36f53;
+            --tree-trunk: #6d4c37;
+            --tree-crown: #3f8e61;
+            --text-primary: #0f2a37;
         }
 
         * {
@@ -24,304 +29,524 @@
         }
 
         body {
-            font-family: "Share Tech Mono", "Inter", "Helvetica Neue", Arial, sans-serif;
-            min-height: 100vh;
-            background: radial-gradient(circle at 20% -10%, rgba(0, 255, 170, 0.15), transparent 60%),
-                        radial-gradient(circle at 80% 120%, rgba(0, 120, 80, 0.35), transparent 65%),
-                        var(--matrix-bg);
+            font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+            background: #f0f6fa;
             color: var(--text-primary);
-            overflow: hidden;
-        }
-
-        .scene {
-            position: relative;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: clamp(1.5rem, 4vw, 4rem);
         }
 
-        .matrix-rain {
+        .landscape {
+            position: relative;
+            flex: 1;
+            min-height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(var(--sky-top) 0%, var(--sky-bottom) 64%, #a9e4f1 64%, #5da9ba 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .sky-layer {
             position: absolute;
             inset: 0;
-            overflow: hidden;
+            height: min(68vh, 520px);
             pointer-events: none;
         }
 
-        .matrix-rain::after {
-            content: "";
+        .sun {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(2, 10, 6, 0), rgba(2, 10, 6, 0.65) 65%, rgba(2, 10, 6, 0.95));
-        }
-
-        .matrix-rain span {
-            position: absolute;
-            top: -130%;
-            left: calc(var(--i) * 5%);
-            font-size: clamp(0.9rem, 2vw, 1.35rem);
-            font-weight: 400;
-            letter-spacing: 0.2rem;
-            color: var(--matrix-green);
-            text-shadow: 0 0 12px var(--matrix-glow), 0 0 22px rgba(43, 255, 136, 0.35);
-            opacity: calc(0.35 + (var(--i) * 0.02));
-            white-space: pre;
-            writing-mode: vertical-rl;
-            text-orientation: upright;
-            animation: matrix-fall calc(7s + (var(--i) * 0.2s)) linear infinite;
-            animation-delay: calc(var(--i) * -0.45s);
-        }
-
-        @keyframes matrix-fall {
-            0% { transform: translate3d(0, -5%, 0); }
-            100% { transform: translate3d(0, 140%, 0); }
-        }
-
-        .hero-message {
-            position: relative;
-            max-width: min(900px, 90vw);
-            padding: clamp(1.5rem, 3vw, 2.5rem);
-            border: 1px solid rgba(43, 255, 136, 0.35);
-            border-radius: 1.5rem;
-            background: rgba(2, 10, 6, 0.55);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
-            z-index: 2;
-        }
-
-        .hero-message h1 {
-            font-size: clamp(2rem, 5vw, 3.6rem);
-            letter-spacing: 0.2rem;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-        }
-
-        .hero-message p {
-            font-size: clamp(1rem, 2.3vw, 1.35rem);
-            line-height: 1.7;
-            color: rgba(209, 255, 231, 0.9);
-        }
-
-        .hero-message strong {
-            color: var(--matrix-green);
-        }
-
-        .powerups {
-            position: relative;
-            display: flex;
-            gap: clamp(1rem, 4vw, 3rem);
-            margin-top: clamp(1.5rem, 4vw, 3rem);
-            z-index: 2;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .powerup {
-            width: clamp(90px, 12vw, 140px);
-            height: clamp(90px, 12vw, 140px);
-            display: grid;
-            place-items: center;
-            border-radius: 50%;
-            background: rgba(2, 10, 6, 0.6);
-            border: 1px solid rgba(43, 255, 136, 0.35);
-            box-shadow: 0 0 18px rgba(43, 255, 136, 0.3);
-            animation: floaty 8s ease-in-out infinite;
-        }
-
-        .powerup img {
-            width: 70%;
-            filter: drop-shadow(0 0 0.6rem rgba(43, 255, 136, 0.3));
-        }
-
-        .powerup:nth-child(2) { animation-delay: 1.5s; }
-        .powerup:nth-child(3) { animation-delay: 3s; }
-
-        @keyframes floaty {
-            0%, 100% { transform: translateY(0) scale(0.95); }
-            50% { transform: translateY(-18px) scale(1.05); }
-        }
-
-        .chase {
-            position: absolute;
-            bottom: 12vh;
-            left: 5vw;
-            width: 90vw;
-            max-width: 1100px;
-            height: 140px;
-            z-index: 1;
-        }
-
-        .pacman {
-            position: absolute;
-            width: clamp(70px, 10vw, 110px);
+            top: clamp(6vh, 8vw, 10vh);
+            left: clamp(8vw, 10vw, 14vw);
+            width: clamp(90px, 16vw, 180px);
             aspect-ratio: 1;
-            background: var(--accent-yellow);
             border-radius: 50%;
-            filter: drop-shadow(0 0 0.8rem rgba(247, 211, 84, 0.5));
-            animation: pac-path 11s linear infinite;
+            background: radial-gradient(circle at 30% 30%, #fff9e0 0%, var(--sun) 70%);
+            box-shadow: 0 0 60px rgba(255, 212, 111, 0.6);
+            animation: sunPulse 8s ease-in-out infinite;
         }
 
-        .pacman::before {
+        @keyframes sunPulse {
+            0%, 100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 50px rgba(255, 212, 111, 0.45);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 70px rgba(255, 212, 111, 0.75);
+            }
+        }
+
+        .cloud {
+            position: absolute;
+            left: -35vw;
+            display: inline-flex;
+            align-items: center;
+            gap: clamp(10px, 2vw, 22px);
+            padding: clamp(12px, 2vw, 18px) clamp(22px, 3.6vw, 38px);
+            min-width: clamp(140px, 24vw, 240px);
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 999px;
+            box-shadow: 0 20px 40px rgba(15, 42, 55, 0.12);
+            animation: cloudFloat 70s linear infinite;
+            will-change: transform;
+        }
+
+        .cloud::before,
+        .cloud::after {
             content: "";
             position: absolute;
-            inset: 0;
-            background: var(--matrix-bg);
-            clip-path: polygon(50% 50%, 100% 0%, 100% 100%);
-            transform-origin: 50% 50%;
-            animation: pac-chomp 0.38s infinite ease-in-out;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
         }
 
-        @keyframes pac-chomp {
-            0% { transform: rotate(22deg); }
-            50% { transform: rotate(0deg); }
-            100% { transform: rotate(22deg); }
-        }
-
-        @keyframes pac-path {
-            0% { transform: translate3d(-12%, 0, 0); }
-            30% { transform: translate3d(32%, -30px, 0); }
-            45% { transform: translate3d(78%, -10px, 0); }
-            50% { transform: translate3d(82%, -6px, 0) scaleX(-1); }
-            80% { transform: translate3d(10%, 25px, 0) scaleX(-1); }
-            100% { transform: translate3d(-12%, 0, 0) scaleX(1); }
-        }
-
-        .ghost {
-            position: absolute;
-            width: clamp(65px, 8.5vw, 95px);
-            height: clamp(70px, 9vw, 110px);
-            background: linear-gradient(180deg, var(--ghost-body) 0%, var(--ghost-dark) 70%);
-            border-radius: 45% 45% 35% 35%;
-            animation: ghost-path 11s linear infinite;
-            animation-delay: 0.55s;
-            filter: drop-shadow(0 0 0.7rem rgba(255, 122, 211, 0.4));
-        }
-
-        .ghost::before {
-            content: "";
-            position: absolute;
-            inset: 58% 0 0;
-            background:
-                radial-gradient(circle at 16% 50%, var(--matrix-bg) 30%, transparent 31%),
-                radial-gradient(circle at 50% 50%, var(--matrix-bg) 30%, transparent 31%),
-                radial-gradient(circle at 84% 50%, var(--matrix-bg) 30%, transparent 31%);
-            background-size: 34% 50%;
-            background-repeat: repeat-x;
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 66% 82%, 50% 100%, 33% 82%, 16% 100%, 0 82%);
-        }
-
-        .ghost-eyes {
-            position: absolute;
-            top: 28%;
-            left: 50%;
+        .cloud::before {
             width: 70%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateX(-50%);
+            height: 90%;
+            top: -55%;
+            left: 10%;
         }
 
-        .ghost-eye {
-            width: 28%;
-            aspect-ratio: 1;
-            background: #ffffff;
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .ghost-eye::after {
-            content: "";
-            position: absolute;
+        .cloud::after {
             width: 45%;
-            height: 45%;
-            background: #0b2042;
+            height: 60%;
+            bottom: -45%;
+            right: 8%;
+        }
+
+        .cloud img {
+            height: clamp(34px, 6vw, 64px);
+            filter: drop-shadow(0 10px 18px rgba(44, 133, 116, 0.25));
+        }
+
+        .cloud-1 {
+            top: clamp(10vh, 18vw, 24vh);
+            animation-duration: 68s;
+            animation-delay: -20s;
+        }
+
+        .cloud-2 {
+            top: clamp(6vh, 14vw, 18vh);
+            animation-duration: 82s;
+            animation-delay: -38s;
+        }
+
+        .cloud-3 {
+            top: clamp(20vh, 26vw, 30vh);
+            animation-duration: 60s;
+            animation-delay: -50s;
+        }
+
+        @keyframes cloudFloat {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(170vw); }
+        }
+
+        .birds {
+            position: absolute;
+            top: clamp(16vh, 22vw, 28vh);
+            left: -15vw;
+            display: flex;
+            gap: clamp(16px, 3vw, 32px);
+            animation: birdsFlight 34s linear infinite;
+        }
+
+        .birds span {
+            position: relative;
+            display: block;
+            width: clamp(28px, 4vw, 44px);
+            height: clamp(12px, 2vw, 20px);
+        }
+
+        .birds span::before,
+        .birds span::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 50%;
+            height: 50%;
+            border-top: clamp(2px, 0.5vw, 3px) solid rgba(15, 42, 55, 0.65);
             border-radius: 50%;
-            top: 45%;
-            left: 55%;
         }
 
-        @keyframes ghost-path {
-            0% { transform: translate3d(-20%, 10px, 0); }
-            25% { transform: translate3d(20%, -12px, 0); }
-            45% { transform: translate3d(65%, 0, 0); }
-            50% { transform: translate3d(72%, 6px, 0) scaleX(-1); }
-            75% { transform: translate3d(12%, 28px, 0) scaleX(-1); }
-            100% { transform: translate3d(-20%, 10px, 0) scaleX(1); }
+        .birds span::before {
+            left: 0;
+            transform-origin: 100% 50%;
+            animation: wingFlap 1.8s ease-in-out infinite;
         }
 
-        .footer-note {
-            margin-top: clamp(2rem, 4vw, 3.5rem);
-            font-size: clamp(0.85rem, 2vw, 1.05rem);
-            color: rgba(209, 255, 231, 0.7);
-            letter-spacing: 0.08rem;
+        .birds span::after {
+            right: 0;
+            transform-origin: 0 50%;
+            animation: wingFlap 1.8s ease-in-out infinite reverse;
+        }
+
+        @keyframes birdsFlight {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(180vw); }
+        }
+
+        @keyframes wingFlap {
+            0%, 100% { transform: rotate(12deg) scaleX(1); }
+            50% { transform: rotate(-28deg) scaleX(0.85); }
+        }
+
+        .ground {
+            position: relative;
             z-index: 2;
+            padding: clamp(6rem, 9vw, 8rem) clamp(1.5rem, 4vw, 3rem) clamp(8rem, 12vw, 10rem);
         }
 
-        @media (max-width: 680px) {
-            .chase { bottom: 16vh; }
-            .matrix-rain span { left: calc(var(--i) * 7%); }
+        .hill {
+            position: absolute;
+            bottom: clamp(6rem, 8vw, 9rem);
+            border-radius: 50% 50% 0 0;
+            filter: drop-shadow(0 24px 32px rgba(15, 42, 55, 0.18));
+        }
+
+        .hill-left {
+            left: -20%;
+            width: clamp(320px, 55vw, 620px);
+            height: clamp(200px, 32vw, 320px);
+            background: linear-gradient(180deg, #a2d49e 0%, var(--hill-1) 75%);
+        }
+
+        .hill-right {
+            right: -16%;
+            width: clamp(280px, 48vw, 560px);
+            height: clamp(180px, 28vw, 300px);
+            background: linear-gradient(180deg, #8dc492 0%, var(--hill-2) 80%);
+        }
+
+        .hill-center {
+            left: 50%;
+            transform: translateX(-50%);
+            width: clamp(360px, 60vw, 680px);
+            height: clamp(220px, 36vw, 360px);
+            background: linear-gradient(180deg, #7fb685 0%, var(--hill-3) 78%);
+        }
+
+        .village {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            gap: clamp(2rem, 5vw, 6rem);
+            align-items: flex-end;
+            margin-inline: auto;
+            max-width: min(800px, 90vw);
+        }
+
+        .house {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.6rem, 1.5vw, 1rem);
+            z-index: 3;
+            animation: houseBreathe 9s ease-in-out infinite;
+        }
+
+        .house::after {
+            content: "";
+            position: absolute;
+            inset: auto 10% -18%;
+            height: clamp(10px, 1.8vw, 16px);
+            border-radius: 50%;
+            background: rgba(15, 42, 55, 0.22);
+            filter: blur(6px);
+            z-index: -1;
+        }
+
+        @keyframes houseBreathe {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .roof {
+            width: clamp(120px, 18vw, 200px);
+            height: clamp(40px, 6vw, 70px);
+            background: var(--roof);
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+            box-shadow: 0 10px 18px rgba(211, 111, 83, 0.35);
+        }
+
+        .wall {
+            position: relative;
+            width: clamp(130px, 20vw, 220px);
+            padding: clamp(1.2rem, 2.5vw, 2rem) clamp(1rem, 2vw, 1.6rem);
+            border-radius: 1.2rem;
+            background: var(--house-main);
+            box-shadow: 0 22px 30px rgba(15, 42, 55, 0.18);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(0.8rem, 1.6vw, 1.2rem);
+        }
+
+        .wall img {
+            width: clamp(80px, 12vw, 150px);
+        }
+
+        .windows {
+            display: flex;
+            gap: clamp(0.8rem, 1.6vw, 1.4rem);
+        }
+
+        .window {
+            width: clamp(20px, 4vw, 36px);
+            height: clamp(28px, 5vw, 48px);
+            border-radius: 0.6rem;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(170, 220, 235, 0.9) 100%);
+            box-shadow: inset 0 0 6px rgba(15, 42, 55, 0.18);
+        }
+
+        .door {
+            width: clamp(38px, 5vw, 60px);
+            height: clamp(54px, 8vw, 80px);
+            border-radius: 0.8rem 0.8rem 0.4rem 0.4rem;
+            background: linear-gradient(180deg, #c2cfd8 0%, #8ba1b0 100%);
+        }
+
+        .house-side .roof {
+            width: clamp(90px, 14vw, 150px);
+            height: clamp(34px, 5vw, 60px);
+        }
+
+        .house-side .wall {
+            width: clamp(100px, 16vw, 180px);
+            background: var(--house-side);
+            padding-block: clamp(1rem, 2vw, 1.6rem);
+        }
+
+        .house-side .chimney {
+            position: absolute;
+            right: clamp(12px, 2vw, 18px);
+            top: clamp(-30px, -5vw, -22px);
+            width: clamp(18px, 2.5vw, 26px);
+            height: clamp(36px, 4.8vw, 48px);
+            border-radius: 0.4rem 0.4rem 0 0;
+            background: linear-gradient(180deg, #c9795e 0%, #b06147 100%);
+            box-shadow: 0 6px 10px rgba(15, 42, 55, 0.2);
+        }
+
+        .house-side .window-round {
+            width: clamp(36px, 6vw, 60px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(160, 210, 230, 0.9) 70%);
+            box-shadow: inset 0 0 6px rgba(15, 42, 55, 0.18);
+        }
+
+        .tree {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            bottom: clamp(7.5rem, 11vw, 12rem);
+            animation: treeSway 7s ease-in-out infinite;
+        }
+
+        .tree-left { left: clamp(6vw, 10vw, 12vw); }
+        .tree-right { right: clamp(10vw, 12vw, 16vw); animation-delay: 1.5s; }
+
+        @keyframes treeSway {
+            0%, 100% { transform: rotate(-1deg) translateY(0); }
+            50% { transform: rotate(2deg) translateY(-4px); }
+        }
+
+        .trunk {
+            width: clamp(14px, 1.6vw, 18px);
+            height: clamp(60px, 10vw, 90px);
+            background: linear-gradient(180deg, #835f46 0%, var(--tree-trunk) 100%);
+            border-radius: 0.4rem;
+        }
+
+        .crown {
+            width: clamp(90px, 14vw, 140px);
+            height: clamp(90px, 14vw, 140px);
+            border-radius: 50% 50% 45% 45%;
+            background: radial-gradient(circle at 30% 30%, #6cc28a 0%, var(--tree-crown) 70%);
+            box-shadow: inset -12px -18px 0 rgba(45, 108, 75, 0.35);
+            margin-bottom: clamp(-30px, -4vw, -24px);
+        }
+
+        .lake {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: clamp(220px, 32vw, 360px);
+            margin-top: clamp(-6rem, -8vw, -5rem);
+            background: linear-gradient(180deg, var(--lake-top) 0%, rgba(87, 168, 186, 0.92) 50%, var(--lake-bottom) 100%);
+            overflow: hidden;
+        }
+
+        .lake::before {
+            content: "";
+            position: absolute;
+            inset: -40% 0 auto;
+            height: 100%;
+            background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
+            animation: lakeShimmer 14s linear infinite;
+        }
+
+        @keyframes lakeShimmer {
+            0% { transform: translateX(-20%); opacity: 0.45; }
+            50% { transform: translateX(20%); opacity: 0.65; }
+            100% { transform: translateX(-20%); opacity: 0.45; }
+        }
+
+        .logo-reflection {
+            position: absolute;
+            top: clamp(2.6rem, 6vw, 5rem);
+            left: 50%;
+            transform: translateX(-50%) scaleY(-1);
+            opacity: 0.4;
+            filter: blur(1.5px);
+            animation: rippleLogo 10s ease-in-out infinite;
+        }
+
+        .logo-reflection img {
+            width: clamp(90px, 14vw, 160px);
+        }
+
+        @keyframes rippleLogo {
+            0%, 100% { transform: translateX(-50%) scaleY(-1) scale(0.98); }
+            50% { transform: translateX(-50%) scaleY(-1.02) scale(1.02); }
+        }
+
+        .ripples {
+            position: absolute;
+            left: 50%;
+            width: clamp(180px, 30vw, 320px);
+            aspect-ratio: 3 / 1;
+            border: clamp(2px, 0.6vw, 4px) solid rgba(255, 255, 255, 0.28);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            animation: ripple 12s linear infinite;
+        }
+
+        .ripple-1 { top: clamp(3.5rem, 8vw, 6.8rem); }
+        .ripple-2 { top: clamp(5.5rem, 11vw, 9.4rem); animation-delay: -4s; }
+
+        @keyframes ripple {
+            0% { transform: translateX(-50%) scale(0.8); opacity: 0.45; }
+            70% { opacity: 0.12; }
+            100% { transform: translateX(-50%) scale(1.25); opacity: 0; }
+        }
+
+        .tagline {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+            padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2rem) clamp(2.5rem, 5vw, 3rem);
+            color: rgba(15, 42, 55, 0.85);
+            text-shadow: 0 2px 6px rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 720px) {
+            .ground {
+                padding-bottom: clamp(6rem, 14vw, 8rem);
+            }
+
+            .hill {
+                bottom: clamp(5rem, 14vw, 7rem);
+            }
+
+            .tree {
+                bottom: clamp(6rem, 14vw, 9rem);
+            }
+
+            .lake {
+                margin-top: clamp(-4rem, -10vw, -3rem);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 1ms !important;
+                animation-iteration-count: 1 !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="scene">
-        <div class="matrix-rain">
-            <span style="--i:0">010011000101101001001101</span>
-            <span style="--i:1">R1V3RTY0101100010101</span>
-            <span style="--i:2">001101010101110100101</span>
-            <span style="--i:3">Λ01011001Ψ0011001</span>
-            <span style="--i:4">1010Σ101RVTY0110</span>
-            <span style="--i:5">00110101001100101011</span>
-            <span style="--i:6">₿0101RIVERTY101011</span>
-            <span style="--i:7">01010011001010111001</span>
-            <span style="--i:8">₪0110010101Γ0101</span>
-            <span style="--i:9">1010010110010101</span>
-            <span style="--i:10">010101010011011001</span>
-            <span style="--i:11">RVTY010110011001</span>
-            <span style="--i:12">011001010101010011</span>
-            <span style="--i:13">101Σ0101010011</span>
-            <span style="--i:14">Λ010101010010101</span>
-            <span style="--i:15">010010110010101</span>
-            <span style="--i:16">R1V3RTY01001011</span>
-            <span style="--i:17">0101010011001011</span>
-            <span style="--i:18">0101100101010101</span>
-            <span style="--i:19">101001011010010</span>
-        </div>
-
-        <div class="hero-message">
-            <h1>Riverty // Enter the Pac-Trix</h1>
-            <p>
-                Während draußen der Code-Regen rauscht, snackt Pac-Man sich durch die Datenkolonnen.
-                <strong>Riverty bleibt ganz gechillt im Hintergrund</strong> und hält dir die Matrix-Tür offen,
-                bis du den Highscore auf GitHub-Pages weiterjagst.
-            </p>
-        </div>
-
-        <div class="powerups">
-            <div class="powerup" aria-hidden="true">
-                <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="Riverty Power-Up Dunkel">
+    <main class="landscape" aria-label="Animierte Riverty-Landschaft">
+        <div class="sky-layer">
+            <div class="sun" aria-hidden="true"></div>
+            <div class="cloud cloud-1">
+                <img src="https://cdn.riverty.design/logo/riverty-logomark-dark.svg" alt="Riverty Logo als leichte Wolke">
             </div>
-            <div class="powerup" aria-hidden="true">
-                <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="Riverty Power-Up Hell">
-            </div>
-            <div class="powerup" aria-hidden="true">
-                <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="Riverty Power-Up Grün">
+            <div class="cloud cloud-2" aria-hidden="true"></div>
+            <div class="cloud cloud-3" aria-hidden="true"></div>
+            <div class="birds" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
 
-        <div class="chase" aria-hidden="true">
-            <div class="pacman"></div>
-            <div class="ghost">
-                <div class="ghost-eyes">
-                    <div class="ghost-eye"></div>
-                    <div class="ghost-eye"></div>
-                </div>
+        <div class="ground">
+            <div class="hill hill-left" aria-hidden="true"></div>
+            <div class="hill hill-right" aria-hidden="true"></div>
+            <div class="hill hill-center" aria-hidden="true"></div>
+
+            <div class="tree tree-left" aria-hidden="true">
+                <span class="crown" aria-hidden="true"></span>
+                <span class="trunk" aria-hidden="true"></span>
+            </div>
+            <div class="tree tree-right" aria-hidden="true">
+                <span class="crown" aria-hidden="true"></span>
+                <span class="trunk" aria-hidden="true"></span>
+            </div>
+
+            <div class="village">
+                <article class="house house-side" aria-label="Kleines Haus am See">
+                    <div class="chimney" aria-hidden="true"></div>
+                    <div class="roof" aria-hidden="true"></div>
+                    <div class="wall">
+                        <div class="window-round" aria-hidden="true"></div>
+                        <div class="windows" aria-hidden="true">
+                            <span class="window"></span>
+                        </div>
+                        <div class="door" aria-hidden="true"></div>
+                    </div>
+                </article>
+
+                <article class="house house-main" aria-label="Haupthaus mit Riverty Fassadenlogo">
+                    <div class="roof" aria-hidden="true"></div>
+                    <div class="wall">
+                        <img src="https://cdn.riverty.design/logo/riverty-logomark-green.svg" alt="Riverty Logo auf der Hausfassade">
+                        <div class="windows" aria-hidden="true">
+                            <span class="window"></span>
+                            <span class="window"></span>
+                        </div>
+                        <div class="door" aria-hidden="true"></div>
+                    </div>
+                </article>
+
+                <article class="house house-side" aria-label="Modernes Pavillonhaus">
+                    <div class="roof" aria-hidden="true"></div>
+                    <div class="wall">
+                        <div class="windows" aria-hidden="true">
+                            <span class="window"></span>
+                            <span class="window"></span>
+                        </div>
+                        <div class="door" aria-hidden="true"></div>
+                    </div>
+                </article>
             </div>
         </div>
 
-        <p class="footer-note">Hinterlasse ruhig einen Trace in der Matrix – Riverty passt derweil auf deine Credits auf.</p>
-    </div>
+        <div class="lake">
+            <div class="logo-reflection">
+                <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="Spiegelung des Riverty Logos im See">
+            </div>
+            <div class="ripples ripple-1"></div>
+            <div class="ripples ripple-2"></div>
+        </div>
+
+        <p class="tagline">Ein stiller Moment für dich – Riverty behält den Überblick über Wellen, Wind und Wohlgefühl.</p>
+    </main>
 </body>
 </html>
