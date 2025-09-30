@@ -1,6 +1,6 @@
 # Screensaver
 
-Eine kleine HTML/CSS-Screensaver-Seite mit Riverty-Logos.
+Eine kleine HTML/CSS-Screensaver-Seite mit Matrix-Regen, Pac-Man-Jagd und Riverty-Power-Ups.
 
 ## Online-Version
 
@@ -10,7 +10,7 @@ Sobald die GitHub-Pages-Bereitstellung (siehe `.github/workflows/pages.yml`) ein
 https://<dein-github-benutzername>.github.io/screensaver/
 ```
 
-zur Verfügung. Öffne die URL einfach in einem aktuellen Browser (z. B. Chrome, Firefox, Edge oder Safari) und der Screensaver lädt automatisch.
+zur Verfügung. Öffne die URL einfach in einem aktuellen Browser (z. B. Chrome, Firefox, Edge oder Safari) und der Screensaver lädt automatisch – inklusive grünem Glyphen-Regen und Pac-Man-Gag.
 
 ## Nutzung
 
