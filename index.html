@@ -11,36 +11,40 @@
        ========================= */
     :root{
       /* Vanguard */
-      --vanguard-100:#527A42; /* R82 G122 B66  / Pantone 7742 C */
+      --vanguard-100:#527A42; /* R82 G122 B66  */
       --vanguard-70: #86A27B; /* 70% of Vanguard */
       --vanguard-30: #CBD7C6; /* 30% of Vanguard */
 
       /* Charcoal */
-      --charcoal-100:#282828; /* Pantone Black C */
-      --charcoal-70: #686868; /* 70% of Charcoal */
-      --charcoal-25: #C9C9C9; /* 25% of Charcoal */
+      --charcoal-100:#282828;
+      --charcoal-70: #686868;
+      --charcoal-25: #C9C9C9;
 
       /* Haze */
       --haze-100:#E7E4E2;
-      --haze-80: #ECE9E7;     /* 80% of Haze */
-      --haze-50: #F3F1F0;     /* 50% of Haze */
+      --haze-80: #ECE9E7;
+      --haze-50: #F3F1F0;
 
       /* Ember */
       --ember-100:#EF706B;
-      --ember-70: #F49B97;    /* 70% of Ember */
-      --ember-40: #F9C6C4;    /* 40% of Ember */
+      --ember-70: #F49B97;
+      --ember-40: #F9C6C4;
+      /* RGB für transparente Glows */
+      --ember-100-rgb:239,112,107;
+      --ember-70-rgb: 244,155,151;
+      --ember-40-rgb: 249,198,196;
 
-      /* Statisches (nur Day-Schema) */
+      /* Statisches Schema (kein Tag/Nacht) */
       --bg-top:    var(--haze-50);
       --bg-bottom: var(--haze-80);
 
-      /* Wasser – ausschließlich Vanguard-Reihe */
+      /* Wasser – nur Vanguard */
       --water-a: var(--vanguard-30);
       --water-b: var(--vanguard-70);
       --water-c: var(--vanguard-100);
 
       /* Partikel & Text */
-      --mote: var(--ember-70);       /* dezente, warme Funken */
+      --mote: var(--ember-70);
       --text: var(--charcoal-100);
 
       --bg: linear-gradient(180deg,var(--bg-top),var(--bg-bottom));
@@ -63,13 +67,11 @@
     .ss{ position:fixed; inset:0; display:block; isolation:isolate; }
 
     /* =========================
-       3) Durchgehende Wasser-Grundfläche
-          verhindert sichtbare Lücken
+       3) Durchgehende Wasser-Grundfläche (keine Lücken)
        ========================= */
     .water-base{
       position:absolute; left:0; right:0; bottom:0;
       height:62vh; pointer-events:none;
-      /* dunkler am Horizont, heller nach vorne */
       background: linear-gradient(
         to bottom,
         var(--water-c) 0%,
@@ -108,46 +110,85 @@
     @keyframes move3 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
     /* =========================
-       5) Partikel (dezent)
+       5) Ember-Dynamik
+          a) Ember-Glows (feine Funken, warm)
+          b) Ember-Leuchtband (wandernder Schimmer am Horizont)
        ========================= */
-    .motes{ position:absolute; inset:0; pointer-events:none; mix-blend-mode:lighten; }
-    .motes span{
-      --s:4px; --x:50%; --y:60%; --dx:16px; --dy:12px; --dur:28s; --del:0s;
-      position:absolute; left:var(--x); top:var(--y);
-      width:var(--s); height:var(--s); border-radius:999px;
-      background:var(--mote); opacity:.12; filter:blur(.3px);
+
+    /* a) Ember-Glows */
+    .embers{ position:absolute; inset:0; pointer-events:none; mix-blend-mode:screen; }
+    .embers span{
+      --s: 8px;    /* Basisgröße */
+      --x: 50%;    /* Position */
+      --y: 60%;
+      --dx: 18px;  /* Drift */
+      --dy: 14px;
+      --dur: 26s;  /* Dauer */
+      --del: 0s;   /* Delay */
+
+      position:absolute;
+      left:var(--x); top:var(--y);
+      width:var(--s); height:var(--s);
       transform:translate(-50%,-50%);
-      animation:moteFloat var(--dur) ease-in-out var(--del) infinite alternate;
+      border-radius:999px;
+
+      /* Radialer Ember-Glow – nur Markenfarben mit Alpha */
+      background:
+        radial-gradient(circle,
+          rgba(var(--ember-70-rgb), .35) 0%,
+          rgba(var(--ember-70-rgb), .20) 35%,
+          rgba(var(--ember-70-rgb), 0) 70%);
+      box-shadow:
+          0 0 6px 0 rgba(var(--ember-70-rgb), .30),
+          0 0 14px 4px rgba(var(--ember-40-rgb), .22);
+
+      animation:
+        emberFloat var(--dur) ease-in-out var(--del) infinite alternate,
+        emberPulse calc(var(--dur)*.6) ease-in-out var(--del) infinite;
     }
-    @keyframes moteFloat{
-      from{ transform:translate(calc(-50%),calc(-50%)) }
-      to  { transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) }
+    @keyframes emberFloat{
+      from{ transform:translate(calc(-50%), calc(-50%)) }
+      to  { transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) }
     }
-    /* 24 ruhige Partikel */
-    .motes span:nth-child(1){--x:12%;--y:68%;--s:3px;--dx:10px;--dy:8px;--dur:22s}
-    .motes span:nth-child(2){--x:22%;--y:74%;--s:4px;--dx:14px;--dy:9px;--dur:26s;--del:3s}
-    .motes span:nth-child(3){--x:35%;--y:66%;--s:3px;--dx:12px;--dy:7px;--dur:24s;--del:7s}
-    .motes span:nth-child(4){--x:44%;--y:72%;--s:5px;--dx:16px;--dy:10px;--dur:28s;--del:1s}
-    .motes span:nth-child(5){--x:52%;--y:63%;--s:3px;--dx:10px;--dy:8px;--dur:23s;--del:5s}
-    .motes span:nth-child(6){--x:60%;--y:70%;--s:4px;--dx:14px;--dy:9px;--dur:29s;--del:2s}
-    .motes span:nth-child(7){--x:68%;--y:64%;--s:3px;--dx:11px;--dy:8px;--dur:25s;--del:9s}
-    .motes span:nth-child(8){--x:75%;--y:71%;--s:4px;--dx:13px;--dy:9px;--dur:27s;--del:4s}
-    .motes span:nth-child(9){--x:83%;--y:67%;--s:3px;--dx:12px;--dy:7px;--dur:24s;--del:8s}
-    .motes span:nth-child(10){--x:18%;--y:62%;--s:4px;--dx:15px;--dy:9px;--dur:30s;--del:6s}
-    .motes span:nth-child(11){--x:28%;--y:78%;--s:5px;--dx:18px;--dy:12px;--dur:34s;--del:2s}
-    .motes span:nth-child(12){--x:38%;--y:80%;--s:3px;--dx:12px;--dy:8px;--dur:22s;--del:10s}
-    .motes span:nth-child(13){--x:48%;--y:76%;--s:4px;--dx:14px;--dy:9px;--dur:26s;--del:1s}
-    .motes span:nth-child(14){--x:58%;--y:79%;--s:3px;--dx:11px;--dy:7px;--dur:24s;--del:3s}
-    .motes span:nth-child(15){--x:66%;--y:77%;--s:5px;--dx:18px;--dy:11px;--dur:32s}
-    .motes span:nth-child(16){--x:72%;--y:83%;--s:3px;--dx:10px;--dy:8px;--dur:23s;--del:6s}
-    .motes span:nth-child(17){--x:82%;--y:74%;--s:4px;--dx:14px;--dy:9px;--dur:29s;--del:5s}
-    .motes span:nth-child(18){--x:14%;--y:84%;--s:3px;--dx:12px;--dy:8px;--dur:21s;--del:8s}
-    .motes span:nth-child(19){--x:24%;--y:86%;--s:4px;--dx:13px;--dy:9px;--dur:28s;--del:2s}
-    .motes span:nth-child(20){--x:34%;--y:88%;--s:3px;--dx:11px;--dy:7px;--dur:24s;--del:9s}
-    .motes span:nth-child(21){--x:54%;--y:86%;--s:4px;--dx:15px;--dy:9px;--dur:27s;--del:4s}
-    .motes span:nth-child(22){--x:64%;--y:84%;--s:3px;--dx:12px;--dy:8px;--dur:23s;--del:7s}
-    .motes span:nth-child(23){--x:74%;--y:86%;--s:4px;--dx:14px;--dy:9px;--dur:26s;--del:1s}
-    .motes span:nth-child(24){--x:84%;--y:82%;--s:3px;--dx:12px;--dy:8px;--dur:22s;--del:5s}
+    @keyframes emberPulse{
+      0%,100% { opacity:.25 }
+      50%     { opacity:.55 }
+    }
+
+    /* 16 Ember-Glows, verteilt */
+    .embers span:nth-child(1){ --x:18%; --y:66%; --s:7px;  --dx:14px; --dy:10px; --dur:24s }
+    .embers span:nth-child(2){ --x:26%; --y:72%; --s:8px;  --dx:16px; --dy:12px; --dur:28s; --del:3s }
+    .embers span:nth-child(3){ --x:34%; --y:64%; --s:6px;  --dx:12px; --dy:9px;  --dur:22s; --del:6s }
+    .embers span:nth-child(4){ --x:42%; --y:76%; --s:9px;  --dx:18px; --dy:14px; --dur:30s; --del:1s }
+    .embers span:nth-child(5){ --x:52%; --y:68%; --s:7px;  --dx:14px; --dy:10px; --dur:26s; --del:5s }
+    .embers span:nth-child(6){ --x:60%; --y:74%; --s:8px;  --dx:16px; --dy:12px; --dur:28s; --del:2s }
+    .embers span:nth-child(7){ --x:68%; --y:66%; --s:6px;  --dx:12px; --dy:9px;  --dur:24s; --del:8s }
+    .embers span:nth-child(8){ --x:76%; --y:72%; --s:8px;  --dx:16px; --dy:12px; --dur:27s; --del:4s }
+    .embers span:nth-child(9){ --x:84%; --y:70%; --s:7px;  --dx:14px; --dy:10px; --dur:25s; --del:7s }
+    .embers span:nth-child(10){--x:22%; --y:82%; --s:7px;  --dx:14px; --dy:10px; --dur:26s; --del:9s }
+    .embers span:nth-child(11){--x:38%; --y:84%; --s:8px;  --dx:16px; --dy:12px; --dur:29s; --del:2s }
+    .embers span:nth-child(12){--x:48%; --y:80%; --s:6px;  --dx:12px; --dy:9px;  --dur:23s; --del:6s }
+    .embers span:nth-child(13){--x:58%; --y:86%; --s:8px;  --dx:16px; --dy:12px; --dur:31s; --del:3s }
+    .embers span:nth-child(14){--x:66%; --y:82%; --s:7px;  --dx:14px; --dy:10px; --dur:27s; --del:5s }
+    .embers span:nth-child(15){--x:74%; --y:84%; --s:6px;  --dx:12px; --dy:9px;  --dur:22s; --del:10s}
+    .embers span:nth-child(16){--x:86%; --y:80%; --s:8px;  --dx:16px; --dy:12px; --dur:28s; --del:1s }
+
+    /* b) Wanderndes Ember-Leuchtband */
+    .ember-band{
+      position:absolute;
+      left:-50%; width:200%;
+      bottom:34vh; height:20vh;
+      pointer-events:none;
+      background:
+        radial-gradient(ellipse at 50% 50%,
+          rgba(var(--ember-40-rgb), .24) 0%,
+          rgba(var(--ember-40-rgb), .12) 45%,
+          rgba(var(--ember-40-rgb), 0) 70%);
+      filter: blur(12px);
+      animation: bandSlide 30s linear infinite;
+      mix-blend-mode:screen;
+    }
+    @keyframes bandSlide{ from{ transform:translateX(0) } to{ transform:translateX(-25%) } }
 
     /* =========================
        6) Logo
@@ -159,16 +200,16 @@
     .logo-mark img{ width:100%; height:auto }
 
     /* =========================
-       7) Barrierefreiheit
+       7) Reduzierte Bewegung
        ========================= */
     @media (prefers-reduced-motion: reduce){
-      .wave, .motes span{ animation: none !important; }
+      .wave, .embers span, .ember-band{ animation: none !important; }
     }
   </style>
 </head>
 <body>
   <main class="ss" aria-label="Beruhigender, dynamischer Screensaver">
-    <!-- Grundfläche (keine Lücken) -->
+    <!-- Grundfläche -->
     <div class="water-base" aria-hidden="true"></div>
 
     <!-- Wellen (3 Layer, weich & nahtlos) -->
@@ -204,12 +245,13 @@
       </div>
     </div>
 
-    <!-- Partikel -->
-    <div class="motes" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span><span></span>
+    <!-- Ember-Dynamik -->
+    <div class="ember-band" aria-hidden="true"></div>
+    <div class="embers" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
     </div>
 
     <!-- Logo -->
