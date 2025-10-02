@@ -112,7 +112,10 @@
     .flock.mid   { top:16vh; animation-duration:75s }   /* mittel */
     .flock.near  { top:22vh; animation-duration:60s }   /* dunkel */
 
-    @keyframes fly{ from{ transform:translateX(0) } to{ transform:translateX(-60%) } }
+    @keyframes fly{
+      from{ transform:translateX(70%) }
+      to  { transform:translateX(-90%) }
+    }
 
     .flock svg{ position:absolute; width:28px; height:14px; }
     .flock.far  svg{ fill:var(--charcoal-25) }
