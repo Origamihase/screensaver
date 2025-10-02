@@ -3,9 +3,7 @@ name: Deploy static site to Pages
 
 on:
   push:
-    branches:
-      - "main"
-      - "work"
+    branches: ["main", "work"]
   workflow_dispatch:
 
 permissions:
