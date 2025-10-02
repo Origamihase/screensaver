@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light dark" />
   <title>Riverty – Beruhigender Screensaver (CSS only)</title>
   <style>
     /* =========================
@@ -12,51 +11,40 @@
        ========================= */
     :root{
       /* Vanguard */
-      --vanguard-100:#527A42; /* R82 G122 B66  */
-      --vanguard-70: #86A27B; /* R134 G162 B123 (70%) */
-      --vanguard-30: #CBD7C6; /* R203 G215 B198 (30%) */
+      --vanguard-100:#527A42; /* R82 G122 B66  / Pantone 7742 C */
+      --vanguard-70: #86A27B; /* 70% of Vanguard */
+      --vanguard-30: #CBD7C6; /* 30% of Vanguard */
 
       /* Charcoal */
-      --charcoal-100:#282828; /* R40 G40 B40   */
-      --charcoal-70: #686868; /* R104 G104 B104 (70%) */
-      --charcoal-25: #C9C9C9; /* R201 G201 B201 (25%) */
+      --charcoal-100:#282828; /* Pantone Black C */
+      --charcoal-70: #686868; /* 70% of Charcoal */
+      --charcoal-25: #C9C9C9; /* 25% of Charcoal */
 
       /* Haze */
-      --haze-100:#E7E4E2;     /* R231 G228 B226 */
-      --haze-80: #ECE9E7;     /* R236 G233 B231 (80%) */
-      --haze-50: #F3F1F0;     /* R243 G241 B240 (50%) */
+      --haze-100:#E7E4E2;
+      --haze-80: #ECE9E7;     /* 80% of Haze */
+      --haze-50: #F3F1F0;     /* 50% of Haze */
 
       /* Ember */
-      --ember-100:#EF706B;    /* R239 G112 B107 */
-      --ember-70: #F49B97;    /* R244 G155 B151 (70%) */
-      --ember-40: #F9C6C4;    /* R249 G198 B196 (40%) */
+      --ember-100:#EF706B;
+      --ember-70: #F49B97;    /* 70% of Ember */
+      --ember-40: #F9C6C4;    /* 40% of Ember */
 
-      /* Day (hell) */
+      /* Statisches (nur Day-Schema) */
       --bg-top:    var(--haze-50);
       --bg-bottom: var(--haze-80);
-      --water-a:   var(--vanguard-30);
-      --water-b:   var(--vanguard-70);
-      --water-c:   var(--vanguard-100);
-      --mote:      var(--haze-50);
-      --text:      var(--charcoal-100);
-      --logo-tint: rgba(134,162,123,.18);
+
+      /* Wasser – ausschließlich Vanguard-Reihe */
+      --water-a: var(--vanguard-30);
+      --water-b: var(--vanguard-70);
+      --water-c: var(--vanguard-100);
+
+      /* Partikel & Text */
+      --mote: var(--ember-70);       /* dezente, warme Funken */
+      --text: var(--charcoal-100);
 
       --bg: linear-gradient(180deg,var(--bg-top),var(--bg-bottom));
-      --transition:.8s ease;
-    }
-
-    @media (prefers-color-scheme: dark){
-      :root{
-        /* Night (dunkel) */
-        --bg-top:    var(--charcoal-100);
-        --bg-bottom: var(--charcoal-70);
-        --water-a:   var(--vanguard-100);
-        --water-b:   var(--vanguard-70);
-        --water-c:   var(--vanguard-30);
-        --mote:      var(--ember-70);
-        --text:      var(--haze-50);
-        --logo-tint: rgba(243,241,240,.16);
-      }
+      --transition:.6s ease;
     }
 
     /* =========================
@@ -76,22 +64,22 @@
 
     /* =========================
        3) Durchgehende Wasser-Grundfläche
-          -> füllt den gesamten unteren Bereich,
-             dadurch keine Lücken zwischen Wellen
+          verhindert sichtbare Lücken
        ========================= */
     .water-base{
       position:absolute; left:0; right:0; bottom:0;
-      height:62vh;
-      background:
-        linear-gradient(to bottom,
-          var(--water-a) 0%,
-          var(--water-b) 42%,
-          var(--water-c) 100%);
-      pointer-events:none;
+      height:62vh; pointer-events:none;
+      /* dunkler am Horizont, heller nach vorne */
+      background: linear-gradient(
+        to bottom,
+        var(--water-c) 0%,
+        var(--water-b) 55%,
+        var(--water-a) 100%
+      );
     }
 
     /* =========================
-       4) Wellen – weiche, kachelbare Bezier-Kurven
+       4) Wellen – weiche, kachelbare Bezier-Kurven (Q/T)
        ========================= */
     .waves{
       position:absolute; inset-inline:0; bottom:0;
@@ -110,9 +98,9 @@
     }
     .shape{ fill: currentColor }
 
-    /* Layer (exakte Farben, keine Mischungen) */
-    .w1{ color:var(--water-a); height:46vh; bottom:18vh; opacity:.28; filter:blur(.6px);  animation:move1 28s linear infinite; }
-    .w2{ color:var(--water-b); height:52vh; bottom:10vh; opacity:.26; filter:blur(.3px);  animation:move2 38s linear infinite reverse; }
+    /* Layer – exakte Farben, dezente Transparenz */
+    .w1{ color:var(--water-a); height:48vh; bottom:18vh; opacity:.30; filter:blur(.5px);  animation:move1 28s linear infinite; }
+    .w2{ color:var(--water-b); height:54vh; bottom:10vh; opacity:.26; filter:blur(.3px);  animation:move2 38s linear infinite reverse; }
     .w3{ color:var(--water-c); height:62vh; bottom: 0;   opacity:.22; filter:none;        animation:move3 52s linear infinite; }
 
     @keyframes move1 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
@@ -120,7 +108,7 @@
     @keyframes move3 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
     /* =========================
-       5) Dezente Partikel
+       5) Partikel (dezent)
        ========================= */
     .motes{ position:absolute; inset:0; pointer-events:none; mix-blend-mode:lighten; }
     .motes span{
@@ -171,7 +159,7 @@
     .logo-mark img{ width:100%; height:auto }
 
     /* =========================
-       7) Motion-Preference
+       7) Barrierefreiheit
        ========================= */
     @media (prefers-reduced-motion: reduce){
       .wave, .motes span{ animation: none !important; }
@@ -180,38 +168,37 @@
 </head>
 <body>
   <main class="ss" aria-label="Beruhigender, dynamischer Screensaver">
-    <!-- Grundfläche verhindert sichtbare Lücken -->
+    <!-- Grundfläche (keine Lücken) -->
     <div class="water-base" aria-hidden="true"></div>
 
     <!-- Wellen (3 Layer, weich & nahtlos) -->
     <div class="waves" aria-hidden="true">
       <!-- Layer 1 -->
       <div class="wave w1">
-        <!-- Kachelbare, weiche Kurve: M -> Q -> T T T ... -->
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="img" aria-label="Wasserfläche">
           <path class="shape" d="M0,150 Q150,132 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
         </svg>
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
+        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
           <path class="shape" d="M0,150 Q150,132 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
         </svg>
       </div>
 
       <!-- Layer 2 -->
       <div class="wave w2">
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
+        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
           <path class="shape" d="M0,160 Q150,138 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
         </svg>
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
+        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
           <path class="shape" d="M0,160 Q150,138 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
         </svg>
       </div>
 
       <!-- Layer 3 -->
       <div class="wave w3">
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
+        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
           <path class="shape" d="M0,170 Q150,148 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
         </svg>
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
+        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
           <path class="shape" d="M0,170 Q150,148 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
         </svg>
       </div>
