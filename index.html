@@ -106,11 +106,11 @@
     .flock{
       position:absolute; left:-40%; width:200%;
       height:12vh; display:block;
-      animation:fly 60s linear infinite;
+      animation:fly 32s linear infinite;
     }
-    .flock.far   { top:10vh; animation-duration:95s }   /* hell */
-    .flock.mid   { top:16vh; animation-duration:75s }   /* mittel */
-    .flock.near  { top:22vh; animation-duration:60s }   /* dunkel */
+    .flock.far   { top:10vh; animation-duration:42s }   /* hell */
+    .flock.mid   { top:16vh; animation-duration:32s }   /* mittel */
+    .flock.near  { top:22vh; animation-duration:26s }   /* dunkel */
 
     @keyframes fly{
       from{ transform:translateX(70%) }
@@ -243,5 +243,26 @@
       <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="">
     </div>
   </main>
+  <script>
+    (function () {
+      const MIN_DURATION = 18;
+      const MAX_DURATION = 28;
+
+      const setRandomTiming = (element) => {
+        const duration = MIN_DURATION + Math.random() * (MAX_DURATION - MIN_DURATION);
+        const delay = -Math.random() * duration;
+        element.style.animationDuration = `${duration.toFixed(2)}s`;
+        element.style.animationDelay = `${delay.toFixed(2)}s`;
+      };
+
+      const flocks = document.querySelectorAll('.flock');
+      flocks.forEach((flock) => {
+        setRandomTiming(flock);
+        flock.addEventListener('animationiteration', () => {
+          setRandomTiming(flock);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
