@@ -6,169 +6,231 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Riverty – Beruhigender Screensaver (CSS only)</title>
   <style>
-    /* ========= 1) Farbpalette (exakt) ========= */
+    /* ========= 1) Farbpalette (exakt, keine weiteren Farben) ========= */
     :root{
-      /* Vanguard (Wasser) */
-      --vanguard-100:#527A42;  /* R82 G122 B66 */
-      --vanguard-70: #86A27B;  /* 70% of Vanguard */
-      --vanguard-30: #CBD7C6;  /* 30% of Vanguard */
+      /* EMBER – Sonnenuntergang */
+      --ember-40:#F9C6C4;
+      --ember-70:#F49B97;
+      --ember-100:#EF706B;
 
-      /* Haze (Wolken) */
+      /* HAZE – Wolken */
+      --haze-50:#F3F1F0;
+      --haze-80:#ECE9E7;
       --haze-100:#E7E4E2;
-      --haze-80: #ECE9E7;
-      --haze-50: #F3F1F0;
 
-      /* Ember (Himmel) */
-      --ember-40:#F9C6C4;     /* 40% of Ember */
+      /* VANGUARD – Wiese */
+      --vanguard-30:#CBD7C6;
+      --vanguard-70:#86A27B;
+      --vanguard-100:#527A42;
 
-      /* Text/Logo (unverändert) */
-      --text:#282828;
-
-      /* Hintergründe */
-      --sky: var(--ember-40); /* gewünschter Himmelston */
+      /* CHARCOAL – Vögel */
+      --charcoal-25:#C9C9C9;
+      --charcoal-70:#686868;
+      --charcoal-100:#282828;
     }
 
-    /* ========= 2) Layout ========= */
+    /* ========= 2) Grundlayout ========= */
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
       font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;
-      background: var(--sky);
-      color: var(--text);
+
+      /* Sonnenuntergang: Ember-Verlauf (oben hell, Richtung Horizont satter) */
+      background: linear-gradient(180deg,
+        var(--ember-40) 0%,
+        var(--ember-70) 55%,
+        var(--ember-100) 100%
+      );
       overflow:hidden;
     }
-    .ss{position:fixed; inset:0; display:block; isolation:isolate}
+    .scene{position:fixed; inset:0; display:block; isolation:isolate}
 
-    /* ========= 3) Wolken (Haze, weich & kachelbar) ========= */
+    /* ========= 3) Wolken – Haze-Schichten (weich, kachelbar, CSS-only) ========= */
     .clouds{
       position:absolute; left:0; right:0; top:0;
-      height:48vh; pointer-events:none;
+      height:42vh; pointer-events:none;
     }
     .cloud{
       position:absolute; left:0; top:0;
       width:200%; display:flex;
+      filter:blur(10px);
       will-change:transform;
-      filter: blur(8px);
-      opacity:.88;
+      opacity:.9;
     }
     .cloud svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision}
     .cloud .shape{fill: currentColor}
 
-    /* Drei Haze-Layer mit sanfter Parallaxe */
-    .c1{ color:var(--haze-50); height:22vh; top:10vh; filter:blur(12px); animation:drift1 120s linear infinite }
-    .c2{ color:var(--haze-80); height:20vh; top:16vh; filter:blur(10px); animation:drift2 90s  linear infinite reverse }
-    .c3{ color:var(--haze-100);height:18vh; top:22vh; filter:blur(8px);  animation:drift3 75s  linear infinite }
+    .c1{ color:var(--haze-50); height:18vh; top:10vh; filter:blur(14px); animation:drift1 110s linear infinite }
+    .c2{ color:var(--haze-80); height:16vh; top:16vh; filter:blur(12px); animation:drift2 85s  linear infinite reverse }
+    .c3{ color:var(--haze-100);height:14vh; top:22vh; filter:blur(10px); animation:drift3 70s  linear infinite }
 
     @keyframes drift1{from{transform:translateX(0)} to{transform:translateX(-50%)}}
     @keyframes drift2{from{transform:translateX(0)} to{transform:translateX(-50%)}}
     @keyframes drift3{from{transform:translateX(0)} to{transform:translateX(-50%)}}
 
-    /* Wolkenformen: glatte Q/T-Beziers, nahtlos kachelbar */
-    /* (Füllung liegt unterhalb der Kurve – „Wolkenbank“) */
+    /* Kurven: Q/T-Beziers – nahtlos kachelbar, weiche Konturen */
+    /* Füllung liegt unter der Kurve (Wolkenbank) */
 
-    /* ========= 4) Wasser – Grundfläche + drei Wellen (Vanguard) ========= */
-    .water-base{
-      position:absolute; left:0; right:0; bottom:0; height:62vh; pointer-events:none;
-      background: linear-gradient(to bottom, var(--vanguard-30) 0%, var(--vanguard-70) 55%, var(--vanguard-100) 100%);
+    /* ========= 4) Wiese – Vanguard-Grundfläche + Hügel ========= */
+    .meadow-base{
+      position:absolute; left:0; right:0; bottom:0; height:60vh; pointer-events:none;
+      background: linear-gradient(
+        to bottom,
+        var(--vanguard-30) 0%,
+        var(--vanguard-70) 55%,
+        var(--vanguard-100) 100%
+      );
     }
 
-    .waves{position:absolute; left:0; right:0; bottom:0; height:62vh; pointer-events:none}
-    .wave{
+    .hills{ position:absolute; left:0; right:0; bottom:0; height:60vh; pointer-events:none }
+    .hill{
       position:absolute; left:0; bottom:0;
       width:200%; display:flex; will-change:transform; backface-visibility:hidden; transform:translateZ(0)
     }
-    .wave svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision}
-    .wave .shape{fill: currentColor}
+    .hill svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision}
+    .hill .shape{fill: currentColor}
 
-    .w1{ color:var(--vanguard-30); height:48vh; bottom:18vh; opacity:.30; filter:blur(.5px); animation:move1 28s linear infinite }
-    .w2{ color:var(--vanguard-70); height:54vh; bottom:10vh; opacity:.26; filter:blur(.3px); animation:move2 38s linear infinite reverse }
-    .w3{ color:var(--vanguard-100);height:62vh; bottom: 0;  opacity:.22; filter:none;      animation:move3 52s linear infinite }
+    /* Drei Ebenen – exakt die Vanguard-Farben */
+    .h1{ color:var(--vanguard-30); height:42vh; bottom:18vh; opacity:.35; animation:hill1 38s linear infinite }
+    .h2{ color:var(--vanguard-70); height:48vh; bottom:10vh; opacity:.30; animation:hill2 52s linear infinite reverse }
+    .h3{ color:var(--vanguard-100);height:60vh; bottom: 0;  opacity:.26; animation:hill3 70s linear infinite }
 
-    @keyframes move1{from{transform:translateX(0)} to{transform:translateX(-50%)}}
-    @keyframes move2{from{transform:translateX(0)} to{transform:translateX(-50%)}}
-    @keyframes move3{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    @keyframes hill1{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    @keyframes hill2{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    @keyframes hill3{from{transform:translateX(0)} to{transform:translateX(-50%)}}
 
-    /* ========= 5) Logo ========= */
-    .logo-mark{
-      position:absolute; left:50%; bottom:8vh; transform:translateX(-50%);
-      width:clamp(64px,8vw,96px); pointer-events:none; filter:saturate(.9)
+    /* ========= 5) Vögel – ausschließlich Charcoal-Töne ========= */
+    .birds{ position:absolute; inset:0; pointer-events:none }
+    .flock{
+      position:absolute; left:-40%; width:200%;
+      height:12vh; display:block;
+      animation:fly 60s linear infinite;
     }
-    .logo-mark img{width:100%; height:auto}
+    .flock.far   { top:10vh; animation-duration:95s }  /* hellste (25%) */
+    .flock.mid   { top:16vh; animation-duration:75s }  /* 70% */
+    .flock.near  { top:22vh; animation-duration:60s }  /* 100% */
 
-    /* ========= 6) Reduced Motion ========= */
-    @media (prefers-reduced-motion:reduce){
-      .cloud,.wave{animation:none !important}
+    @keyframes fly{ from{ transform:translateX(0) } to{ transform:translateX(-60%) } }
+
+    .flock svg{ position:absolute; width:32px; height:16px; }
+    .flock.far  svg{ fill:var(--charcoal-25) }
+    .flock.mid  svg{ fill:var(--charcoal-70) }
+    .flock.near svg{ fill:var(--charcoal-100) }
+
+    /* Positionen/Skalierung je Vogel (gleiches Pfad-Icon) */
+    .flock svg:nth-child(1){ left:6%;  top:20%; transform:scale(1.00) }
+    .flock svg:nth-child(2){ left:14%; top:40%; transform:scale(0.85) }
+    .flock svg:nth-child(3){ left:22%; top:25%; transform:scale(1.10) }
+    .flock svg:nth-child(4){ left:34%; top:45%; transform:scale(0.95) }
+    .flock svg:nth-child(5){ left:46%; top:30%; transform:scale(1.05) }
+    .flock svg:nth-child(6){ left:58%; top:42%; transform:scale(0.90) }
+    .flock svg:nth-child(7){ left:70%; top:28%; transform:scale(1.00) }
+    .flock svg:nth-child(8){ left:84%; top:38%; transform:scale(0.88) }
+
+    /* ========= 6) Bewegungsreduktion ========= */
+    @media (prefers-reduced-motion: reduce){
+      .cloud, .hill, .flock{ animation: none !important; }
     }
   </style>
 </head>
 <body>
-  <main class="ss" aria-label="Beruhigender, dynamischer Screensaver">
-    <!-- Wolken (Haze) -->
+  <main class="scene" aria-label="Beruhigender, dynamischer Screensaver">
+    <!-- Wolken (HAZE) -->
     <div class="clouds" aria-hidden="true">
-      <!-- Cloud-Layer 1 (Haze 50) -->
+      <!-- Haze 50 -->
       <div class="cloud c1">
-        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" role="img" aria-label="Wolkenbank">
-          <path class="shape" d="M0,90 Q120,40 240,90 T480,90 T720,90 T960,90 T1200,90 L1200,200 L0,200 Z"/>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" role="img" aria-label="Wolkenbank">
+          <path class="shape" d="M0,70 Q120,30 240,70 T480,70 T720,70 T960,70 T1200,70 L1200,160 L0,160 Z"/>
         </svg>
-        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,90 Q120,40 240,90 T480,90 T720,90 T960,90 T1200,90 L1200,200 L0,200 Z"/>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,70 Q120,30 240,70 T480,70 T720,70 T960,70 T1200,70 L1200,160 L0,160 Z"/>
         </svg>
       </div>
-
-      <!-- Cloud-Layer 2 (Haze 80) -->
+      <!-- Haze 80 -->
       <div class="cloud c2">
-        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,100 Q150,55 300,100 T600,100 T900,100 T1200,100 L1200,200 L0,200 Z"/>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,78 Q160,42 320,78 T640,78 T960,78 T1200,78 L1200,160 L0,160 Z"/>
         </svg>
-        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,100 Q150,55 300,100 T600,100 T900,100 T1200,100 L1200,200 L0,200 Z"/>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,78 Q160,42 320,78 T640,78 T960,78 T1200,78 L1200,160 L0,160 Z"/>
         </svg>
       </div>
-
-      <!-- Cloud-Layer 3 (Haze 100) -->
+      <!-- Haze 100 -->
       <div class="cloud c3">
-        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,110 Q160,70 320,110 T640,110 T960,110 T1200,110 L1200,200 L0,200 Z"/>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,86 Q180,56 360,86 T720,86 T1080,86 T1200,86 L1200,160 L0,160 Z"/>
         </svg>
-        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,110 Q160,70 320,110 T640,110 T960,110 T1200,110 L1200,200 L0,200 Z"/>
-        </svg>
-      </div>
-    </div>
-
-    <!-- Wasser (Vanguard) -->
-    <div class="water-base" aria-hidden="true"></div>
-    <div class="waves" aria-hidden="true">
-      <div class="wave w1">
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="img" aria-label="Wasserfläche">
-          <path class="shape" d="M0,150 Q150,132 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
-        </svg>
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,150 Q150,132 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
-        </svg>
-      </div>
-      <div class="wave w2">
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,160 Q150,138 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
-        </svg>
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,160 Q150,138 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
-        </svg>
-      </div>
-      <div class="wave w3">
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,170 Q150,148 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
-        </svg>
-        <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,170 Q150,148 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,86 Q180,56 360,86 T720,86 T1080,86 T1200,86 L1200,160 L0,160 Z"/>
         </svg>
       </div>
     </div>
 
-    <!-- Logo -->
-    <div class="logo-mark" aria-hidden="true">
-      <img src="https://cdn.riverty.design/logo/riverty-logomark-light.svg" alt="">
+    <!-- Vögel (CHARCOAL) -->
+    <div class="birds" aria-hidden="true">
+      <div class="flock far">
+        <!-- 8 Vögel, hellste Charcoal-Stufe -->
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+      </div>
+      <div class="flock mid">
+        <!-- 8 Vögel, mittlere Charcoal-Stufe -->
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+      </div>
+      <div class="flock near">
+        <!-- 8 Vögel, dunkelste Charcoal-Stufe -->
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+        <svg viewBox="0 0 24 12"><path d="M0,10 Q12,1 24,10 Q12,6 0,10Z"/></svg>
+      </div>
+    </div>
+
+    <!-- Wiese (VANGUARD) -->
+    <div class="meadow-base" aria-hidden="true"></div>
+    <div class="hills" aria-hidden="true">
+      <div class="hill h1">
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" role="img" aria-label="Hügel">
+          <path class="shape" d="M0,160 Q180,120 360,160 T720,160 T1080,160 T1200,160 L1200,280 L0,280 Z"/>
+        </svg>
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,160 Q180,120 360,160 T720,160 T1080,160 T1200,160 L1200,280 L0,280 Z"/>
+        </svg>
+      </div>
+      <div class="hill h2">
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,170 Q200,130 400,170 T800,170 T1200,170 L1200,280 L0,280 Z"/>
+        </svg>
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,170 Q200,130 400,170 T800,170 T1200,170 L1200,280 L0,280 Z"/>
+        </svg>
+      </div>
+      <div class="hill h3">
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,180 Q220,140 440,180 T880,180 T1200,180 L1200,280 L0,280 Z"/>
+        </svg>
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,180 Q220,140 440,180 T880,180 T1200,180 L1200,280 L0,280 Z"/>
+        </svg>
+      </div>
     </div>
   </main>
 </body>
