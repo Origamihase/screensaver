@@ -39,7 +39,7 @@
       --water-c:   var(--vanguard-100);
       --mote:      var(--haze-50);
       --text:      var(--charcoal-100);
-      --logo-tint: rgba(134,162,123,.18); /* dezent */
+      --logo-tint: rgba(134,162,123,.18);
 
       --bg: linear-gradient(180deg,var(--bg-top),var(--bg-bottom));
       --transition:.8s ease;
@@ -72,42 +72,55 @@
       overflow:hidden;
       transition: background var(--transition), color var(--transition);
     }
-    .ss{
-      position:fixed; inset:0;
-      display:block;
-      isolation:isolate;
+    .ss{ position:fixed; inset:0; display:block; isolation:isolate; }
+
+    /* =========================
+       3) Durchgehende Wasser-Grundfläche
+          -> füllt den gesamten unteren Bereich,
+             dadurch keine Lücken zwischen Wellen
+       ========================= */
+    .water-base{
+      position:absolute; left:0; right:0; bottom:0;
+      height:62vh;
+      background:
+        linear-gradient(to bottom,
+          var(--water-a) 0%,
+          var(--water-b) 42%,
+          var(--water-c) 100%);
+      pointer-events:none;
     }
 
     /* =========================
-       3) Wellen – moderne, weiche Tiles
-          - Quadratische Beziers (Q/T) -> kontinuierliche Tangente
-          - Zwei identische SVGs pro Layer (nahtlose Endlosbewegung)
+       4) Wellen – weiche, kachelbare Bezier-Kurven
        ========================= */
     .waves{
       position:absolute; inset-inline:0; bottom:0;
       height:62vh; pointer-events:none;
     }
     .wave{
-      position:absolute; left:0; right:0; bottom:0;
+      position:absolute; left:0; bottom:0;
       width:200%; display:flex;
       will-change: transform;
+      backface-visibility:hidden;
+      transform: translateZ(0);
     }
     .wave svg{
       width:50%; height:100%; flex:0 0 50%;
+      shape-rendering:geometricPrecision;
     }
     .shape{ fill: currentColor }
 
-    /* Layer-Design (keine Farb-Mischung, nur exakte HEX) */
-    .w1{ color:var(--water-a); height:48vh; bottom:18vh; opacity:.32; filter:blur(.8px);  animation:waveMove1 28s linear infinite; }
-    .w2{ color:var(--water-b); height:54vh; bottom:10vh; opacity:.28; filter:blur(.4px);  animation:waveMove2 38s linear infinite reverse; }
-    .w3{ color:var(--water-c); height:62vh; bottom: 0;   opacity:.24; filter:none;        animation:waveMove3 52s linear infinite; }
+    /* Layer (exakte Farben, keine Mischungen) */
+    .w1{ color:var(--water-a); height:46vh; bottom:18vh; opacity:.28; filter:blur(.6px);  animation:move1 28s linear infinite; }
+    .w2{ color:var(--water-b); height:52vh; bottom:10vh; opacity:.26; filter:blur(.3px);  animation:move2 38s linear infinite reverse; }
+    .w3{ color:var(--water-c); height:62vh; bottom: 0;   opacity:.22; filter:none;        animation:move3 52s linear infinite; }
 
-    @keyframes waveMove1 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    @keyframes waveMove2 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    @keyframes waveMove3 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes move1 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes move2 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes move3 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
     /* =========================
-       4) Partikel (Motes)
+       5) Dezente Partikel
        ========================= */
     .motes{ position:absolute; inset:0; pointer-events:none; mix-blend-mode:lighten; }
     .motes span{
@@ -122,7 +135,7 @@
       from{ transform:translate(calc(-50%),calc(-50%)) }
       to  { transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) }
     }
-    /* 24 vordefinierte Partikel (ruhig, dezent) */
+    /* 24 ruhige Partikel */
     .motes span:nth-child(1){--x:12%;--y:68%;--s:3px;--dx:10px;--dy:8px;--dur:22s}
     .motes span:nth-child(2){--x:22%;--y:74%;--s:4px;--dx:14px;--dy:9px;--dur:26s;--del:3s}
     .motes span:nth-child(3){--x:35%;--y:66%;--s:3px;--dx:12px;--dy:7px;--dur:24s;--del:7s}
@@ -149,17 +162,16 @@
     .motes span:nth-child(24){--x:84%;--y:82%;--s:3px;--dx:12px;--dy:8px;--dur:22s;--del:5s}
 
     /* =========================
-       5) Logo
+       6) Logo
        ========================= */
     .logo-mark{
       position:absolute; left:50%; bottom:8vh; transform:translateX(-50%);
-      width:clamp(64px,8vw,96px);
-      pointer-events:none; filter:saturate(.9);
+      width:clamp(64px,8vw,96px); pointer-events:none; filter:saturate(.9);
     }
     .logo-mark img{ width:100%; height:auto }
 
     /* =========================
-       6) Motion-Preference
+       7) Motion-Preference
        ========================= */
     @media (prefers-reduced-motion: reduce){
       .wave, .motes span{ animation: none !important; }
@@ -168,41 +180,44 @@
 </head>
 <body>
   <main class="ss" aria-label="Beruhigender, dynamischer Screensaver">
-    <!-- Wellen (3 Layer, nahtlos, weich) -->
+    <!-- Grundfläche verhindert sichtbare Lücken -->
+    <div class="water-base" aria-hidden="true"></div>
+
+    <!-- Wellen (3 Layer, weich & nahtlos) -->
     <div class="waves" aria-hidden="true">
-      <!-- Layer 1 (leicht) -->
+      <!-- Layer 1 -->
       <div class="wave w1">
-        <!-- Quadratische Bezier: Start-Q, dann T für glatte Fortsetzung -->
+        <!-- Kachelbare, weiche Kurve: M -> Q -> T T T ... -->
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="img" aria-label="Wasserfläche">
-          <path class="shape" d="M0,150 Q150,130 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
+          <path class="shape" d="M0,150 Q150,132 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
         </svg>
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
-          <path class="shape" d="M0,150 Q150,130 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
+          <path class="shape" d="M0,150 Q150,132 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
         </svg>
       </div>
 
-      <!-- Layer 2 (mittel) -->
+      <!-- Layer 2 -->
       <div class="wave w2">
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
-          <path class="shape" d="M0,160 Q150,135 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
+          <path class="shape" d="M0,160 Q150,138 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
         </svg>
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
-          <path class="shape" d="M0,160 Q150,135 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
+          <path class="shape" d="M0,160 Q150,138 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
         </svg>
       </div>
 
-      <!-- Layer 3 (tief) -->
+      <!-- Layer 3 -->
       <div class="wave w3">
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
-          <path class="shape" d="M0,170 Q150,145 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
+          <path class="shape" d="M0,170 Q150,148 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
         </svg>
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="presentation" aria-hidden="true">
-          <path class="shape" d="M0,170 Q150,145 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
+          <path class="shape" d="M0,170 Q150,148 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
         </svg>
       </div>
     </div>
 
-    <!-- Dezente Partikel -->
+    <!-- Partikel -->
     <div class="motes" aria-hidden="true">
       <span></span><span></span><span></span><span></span><span></span><span></span>
       <span></span><span></span><span></span><span></span><span></span><span></span>
