@@ -22,14 +22,14 @@
   </script>
   <style>
     :root{
-      --sky-top:#b9d6f2;
-      --sky-bottom:#eef5fb;
-      --water-1:#9ec7d6;
-      --water-2:#6ea7bb;
-      --water-3:#3f7f96;
+      --sky-top:#9fbfda;
+      --sky-bottom:#d2e4f0;
+      --water-1:#7fb0c6;
+      --water-2:#5a94ab;
+      --water-3:#366f85;
       --mote:#0f2a37;
       --text:#0f2a37;
-      --logo: rgba(15,42,55,.08);
+      --logo: rgba(15,42,55,.06);
       --transition:.8s ease;
       --bg: linear-gradient(180deg,var(--sky-top),var(--sky-bottom));
     }
@@ -107,7 +107,7 @@
           if(W.blur) ctx.filter='blur('+W.blur+'px)'; else ctx.filter='none';
           ctx.beginPath(); ctx.moveTo(0,h);
           for(var x=0;x<=w;x+=2*DPR){ var y=baseY+Math.sin((x/len)+phase)*amp+Math.cos((x/(len*2))-phase*.7)*amp*.45; ctx.lineTo(x,y); }
-          ctx.lineTo(w,h); ctx.closePath(); ctx.fillStyle=HSL(hue, 44, mix(56,41,k), W.a); ctx.fill();
+          ctx.lineTo(w,h); ctx.closePath(); ctx.fillStyle=HSL(hue, 44, mix(50,41,k), W.a); ctx.fill();
         }
         ctx.filter='none';
       }
