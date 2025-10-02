@@ -1,4 +1,4 @@
-# pages.yml (unter .github/workflows/pages.yml ablegen)
+# .github/workflows/pages.yml
 name: Deploy static site to Pages
 
 on:
