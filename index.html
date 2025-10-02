@@ -177,7 +177,7 @@
 
     <!-- Vögel (CHARCOAL) – V-Form -->
     <div class="birds" aria-hidden="true">
-      <div class="flock far">
+      <div class="flock far" data-duration-min="40" data-duration-max="48">
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
@@ -187,7 +187,7 @@
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
       </div>
-      <div class="flock mid">
+      <div class="flock mid" data-duration-min="30" data-duration-max="36">
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
@@ -197,7 +197,7 @@
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
       </div>
-      <div class="flock near">
+      <div class="flock near" data-duration-min="24" data-duration-max="30">
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
@@ -245,11 +245,13 @@
   </main>
   <script>
     (function () {
-      const MIN_DURATION = 18;
-      const MAX_DURATION = 28;
-
       const setRandomTiming = (element) => {
-        const duration = MIN_DURATION + Math.random() * (MAX_DURATION - MIN_DURATION);
+        const min = parseFloat(element.dataset.durationMin);
+        const max = parseFloat(element.dataset.durationMax);
+        const hasValidRange = Number.isFinite(min) && Number.isFinite(max) && max > min;
+        const durationMin = hasValidRange ? min : 18;
+        const durationMax = hasValidRange ? max : 28;
+        const duration = durationMin + Math.random() * (durationMax - durationMin);
         const pause = Math.random() * duration;
         element.style.animationDuration = `${duration.toFixed(2)}s`;
         element.style.animationDelay = '0s';
