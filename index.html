@@ -108,9 +108,9 @@
       height:12vh; display:block;
       animation:fly 32s linear infinite;
     }
-    .flock.far   { top:10vh; animation-duration:42s }   /* hell */
-    .flock.mid   { top:16vh; animation-duration:32s }   /* mittel */
-    .flock.near  { top:22vh; animation-duration:26s }   /* dunkel */
+    .flock.far   { top:10vh; animation-duration:50s }   /* hell */
+    .flock.mid   { top:16vh; animation-duration:38s }   /* mittel */
+    .flock.near  { top:22vh; animation-duration:30s }   /* dunkel */
 
     @keyframes fly{
       from{ transform:translateX(70%) }
@@ -177,7 +177,7 @@
 
     <!-- Vögel (CHARCOAL) – V-Form -->
     <div class="birds" aria-hidden="true">
-      <div class="flock far" data-duration-min="42" data-duration-max="50">
+      <div class="flock far" data-duration-min="50" data-duration-max="62">
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
@@ -187,7 +187,7 @@
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
       </div>
-      <div class="flock mid" data-duration-min="32" data-duration-max="40">
+      <div class="flock mid" data-duration-min="38" data-duration-max="48">
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
@@ -197,7 +197,7 @@
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
       </div>
-      <div class="flock near" data-duration-min="26" data-duration-max="34">
+      <div class="flock near" data-duration-min="30" data-duration-max="40">
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
         <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
@@ -246,9 +246,9 @@
   <script>
     (function () {
       const cssBaselines = new Map([
-        ['far', 42],
-        ['mid', 32],
-        ['near', 26],
+        ['far', 50],
+        ['mid', 38],
+        ['near', 30],
       ]);
 
       const resolveBaseline = (element) => {
