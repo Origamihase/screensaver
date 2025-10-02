@@ -4,13 +4,17 @@ Eine kleine HTML/CSS-Screensaver-Seite
 
 ## Online-Version
 
-Dieses Repository enthält einen GitHub-Actions-Workflow unter `.github/workflows/pages.yml`, der das Projekt nach jedem Push auf den Branch `main` oder `work` automatisch zu GitHub Pages deployt. Aktiviere dazu GitHub Pages in den Repository-Einstellungen („Settings → Pages“) und wähle als Source die Option „GitHub Actions“.
+Das Projekt wird mit dem Workflow [`deploy-pages.yml`](.github/workflows/deploy-pages.yml) automatisch nach GitHub Pages veröffentlicht. So richtest du die Online-Version ein:
 
-Sobald der Workflow einmal erfolgreich durchgelaufen ist, steht der Screensaver öffentlich unter
+1. Aktiviere GitHub Pages in den Repository-Einstellungen (`Settings → Pages`) und wähle als Source die Option „GitHub Actions“.
+2. Stelle sicher, dass deine Änderungen auf dem Branch `main` liegen (oder dort hin gemergt werden).
+3. Warte, bis der Workflow in der Actions-Übersicht erfolgreich durchgelaufen ist.
+
+Nach einem erfolgreichen Lauf findest du die Seite unter
 
 ```
 https://<dein-github-benutzername>.github.io/screensaver/
 ```
 
-zur Verfügung. Öffne die URL einfach in einem aktuellen Browser (z. B. Chrome, Firefox, Edge oder Safari) und der Screensaver lädt automatisch.
+Öffne die URL einfach in einem aktuellen Browser (z. B. Chrome, Firefox, Edge oder Safari) und der Screensaver lädt automatisch.
 
