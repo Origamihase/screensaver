@@ -22,25 +22,31 @@
   </script>
   <style>
     :root{
-      --sky-top:#F3F1F0;
-      --sky-bottom:#E4DDD6;
-      --water-1:#86A27B;
-      --water-2:#6F8C64;
-      --water-3:#566F4E;
-      --mote:#F3F1F0;
-      --text:#282828;
+      --color-haze-soft:#F3F1F0;
+      --color-haze:#ECE9E7;
+      --color-vanguard-light:#86A27B;
+      --color-vanguard-deep:#527A42;
+      --color-charcoal-soft:#686868;
+      --color-charcoal:#282828;
+      --sky-top:var(--color-haze-soft);
+      --sky-bottom:var(--color-haze);
+      --water-1:var(--color-vanguard-light);
+      --water-2:color-mix(in srgb,var(--color-vanguard-light) 55%,var(--color-vanguard-deep));
+      --water-3:var(--color-vanguard-deep);
+      --mote:var(--color-haze-soft);
+      --text:var(--color-charcoal);
       --logo: rgba(134,162,123,.18);
       --transition:.8s ease;
       --bg: linear-gradient(180deg,var(--sky-top),var(--sky-bottom));
     }
     [data-theme="night"]{
-      --sky-top:#282828;
-      --sky-bottom:#686868;
-      --water-1:#4F5E49;
-      --water-2:#3C4A38;
-      --water-3:#2A3527;
+      --sky-top:var(--color-charcoal);
+      --sky-bottom:var(--color-charcoal-soft);
+      --water-1:color-mix(in srgb,var(--color-charcoal-soft) 70%,var(--color-charcoal));
+      --water-2:color-mix(in srgb,var(--color-charcoal-soft) 50%,var(--color-charcoal));
+      --water-3:var(--color-charcoal);
       --mote:#F49B97;
-      --text:#F3F1F0;
+      --text:var(--color-haze-soft);
       --logo: rgba(243,241,240,.16);
     }
     *{box-sizing:border-box;margin:0;padding:0}
@@ -99,12 +105,13 @@
       function rgba(rgb,a){return 'rgba('+Math.round(rgb.r)+','+Math.round(rgb.g)+','+Math.round(rgb.b)+','+a+')'}
       var COLORS={
         vanguardLight:hexToRgb('#86A27B'),
-        vanguardMid:hexToRgb('#6F8C64'),
         vanguardDeep:hexToRgb('#527A42'),
         charcoal:hexToRgb('#282828'),
+        charcoalSoft:hexToRgb('#686868'),
         ember:hexToRgb('#F49B97'),
-        haze:hexToRgb('#F3F1F0')
+        haze:hexToRgb('#ECE9E7')
       };
+      COLORS.vanguardMid=mixRgb(COLORS.vanguardLight,COLORS.vanguardDeep,.55);
       var waveDayPalette=[
         mixRgb(COLORS.haze,COLORS.vanguardLight,.25),
         mixRgb(COLORS.vanguardLight,COLORS.vanguardMid,.5),
