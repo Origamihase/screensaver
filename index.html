@@ -6,215 +6,140 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Riverty – Beruhigender Screensaver (CSS only)</title>
   <style>
-    /* =========================
-       1) Markenpalette (exakt)
-       ========================= */
+    /* ========= 1) Farbpalette (exakt) ========= */
     :root{
-      /* Vanguard */
-      --vanguard-100:#527A42; /* R82 G122 B66  */
-      --vanguard-70: #86A27B; /* 70% of Vanguard */
-      --vanguard-30: #CBD7C6; /* 30% of Vanguard */
+      /* Vanguard (Wasser) */
+      --vanguard-100:#527A42;  /* R82 G122 B66 */
+      --vanguard-70: #86A27B;  /* 70% of Vanguard */
+      --vanguard-30: #CBD7C6;  /* 30% of Vanguard */
 
-      /* Charcoal */
-      --charcoal-100:#282828;
-      --charcoal-70: #686868;
-      --charcoal-25: #C9C9C9;
-
-      /* Haze */
+      /* Haze (Wolken) */
       --haze-100:#E7E4E2;
       --haze-80: #ECE9E7;
       --haze-50: #F3F1F0;
 
-      /* Ember */
-      --ember-100:#EF706B;
-      --ember-70: #F49B97;
-      --ember-40: #F9C6C4;
-      /* RGB für transparente Glows */
-      --ember-100-rgb:239,112,107;
-      --ember-70-rgb: 244,155,151;
-      --ember-40-rgb: 249,198,196;
+      /* Ember (Himmel) */
+      --ember-40:#F9C6C4;     /* 40% of Ember */
 
-      /* Statisches Schema (kein Tag/Nacht) */
-      --bg-top:    var(--haze-50);
-      --bg-bottom: var(--haze-80);
+      /* Text/Logo (unverändert) */
+      --text:#282828;
 
-      /* Wasser – nur Vanguard */
-      --water-a: var(--vanguard-30);
-      --water-b: var(--vanguard-70);
-      --water-c: var(--vanguard-100);
-
-      /* Partikel & Text */
-      --mote: var(--ember-70);
-      --text: var(--charcoal-100);
-
-      --bg: linear-gradient(180deg,var(--bg-top),var(--bg-bottom));
-      --transition:.6s ease;
+      /* Hintergründe */
+      --sky: var(--ember-40); /* gewünschter Himmelston */
     }
 
-    /* =========================
-       2) Grundlayout
-       ========================= */
+    /* ========= 2) Layout ========= */
     *,*::before,*::after{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: Inter,"Segoe UI",system-ui,-apple-system,sans-serif;
-      background: var(--bg);
+      font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;
+      background: var(--sky);
       color: var(--text);
       overflow:hidden;
-      transition: background var(--transition), color var(--transition);
     }
-    .ss{ position:fixed; inset:0; display:block; isolation:isolate; }
+    .ss{position:fixed; inset:0; display:block; isolation:isolate}
 
-    /* =========================
-       3) Durchgehende Wasser-Grundfläche (keine Lücken)
-       ========================= */
+    /* ========= 3) Wolken (Haze, weich & kachelbar) ========= */
+    .clouds{
+      position:absolute; left:0; right:0; top:0;
+      height:48vh; pointer-events:none;
+    }
+    .cloud{
+      position:absolute; left:0; top:0;
+      width:200%; display:flex;
+      will-change:transform;
+      filter: blur(8px);
+      opacity:.88;
+    }
+    .cloud svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision}
+    .cloud .shape{fill: currentColor}
+
+    /* Drei Haze-Layer mit sanfter Parallaxe */
+    .c1{ color:var(--haze-50); height:22vh; top:10vh; filter:blur(12px); animation:drift1 120s linear infinite }
+    .c2{ color:var(--haze-80); height:20vh; top:16vh; filter:blur(10px); animation:drift2 90s  linear infinite reverse }
+    .c3{ color:var(--haze-100);height:18vh; top:22vh; filter:blur(8px);  animation:drift3 75s  linear infinite }
+
+    @keyframes drift1{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    @keyframes drift2{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    @keyframes drift3{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+
+    /* Wolkenformen: glatte Q/T-Beziers, nahtlos kachelbar */
+    /* (Füllung liegt unterhalb der Kurve – „Wolkenbank“) */
+
+    /* ========= 4) Wasser – Grundfläche + drei Wellen (Vanguard) ========= */
     .water-base{
-      position:absolute; left:0; right:0; bottom:0;
-      height:62vh; pointer-events:none;
-      background: linear-gradient(
-        to bottom,
-        var(--water-c) 0%,
-        var(--water-b) 55%,
-        var(--water-a) 100%
-      );
+      position:absolute; left:0; right:0; bottom:0; height:62vh; pointer-events:none;
+      background: linear-gradient(to bottom, var(--vanguard-30) 0%, var(--vanguard-70) 55%, var(--vanguard-100) 100%);
     }
 
-    /* =========================
-       4) Wellen – weiche, kachelbare Bezier-Kurven (Q/T)
-       ========================= */
-    .waves{
-      position:absolute; inset-inline:0; bottom:0;
-      height:62vh; pointer-events:none;
-    }
+    .waves{position:absolute; left:0; right:0; bottom:0; height:62vh; pointer-events:none}
     .wave{
       position:absolute; left:0; bottom:0;
-      width:200%; display:flex;
-      will-change: transform;
-      backface-visibility:hidden;
-      transform: translateZ(0);
+      width:200%; display:flex; will-change:transform; backface-visibility:hidden; transform:translateZ(0)
     }
-    .wave svg{
-      width:50%; height:100%; flex:0 0 50%;
-      shape-rendering:geometricPrecision;
-    }
-    .shape{ fill: currentColor }
+    .wave svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision}
+    .wave .shape{fill: currentColor}
 
-    /* Layer – exakte Farben, dezente Transparenz */
-    .w1{ color:var(--water-a); height:48vh; bottom:18vh; opacity:.30; filter:blur(.5px);  animation:move1 28s linear infinite; }
-    .w2{ color:var(--water-b); height:54vh; bottom:10vh; opacity:.26; filter:blur(.3px);  animation:move2 38s linear infinite reverse; }
-    .w3{ color:var(--water-c); height:62vh; bottom: 0;   opacity:.22; filter:none;        animation:move3 52s linear infinite; }
+    .w1{ color:var(--vanguard-30); height:48vh; bottom:18vh; opacity:.30; filter:blur(.5px); animation:move1 28s linear infinite }
+    .w2{ color:var(--vanguard-70); height:54vh; bottom:10vh; opacity:.26; filter:blur(.3px); animation:move2 38s linear infinite reverse }
+    .w3{ color:var(--vanguard-100);height:62vh; bottom: 0;  opacity:.22; filter:none;      animation:move3 52s linear infinite }
 
-    @keyframes move1 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    @keyframes move2 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    @keyframes move3 { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes move1{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    @keyframes move2{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+    @keyframes move3{from{transform:translateX(0)} to{transform:translateX(-50%)}}
 
-    /* =========================
-       5) Ember-Dynamik
-          a) Ember-Glows (feine Funken, warm)
-          b) Ember-Leuchtband (wandernder Schimmer am Horizont)
-       ========================= */
-
-    /* a) Ember-Glows */
-    .embers{ position:absolute; inset:0; pointer-events:none; mix-blend-mode:screen; }
-    .embers span{
-      --s: 8px;    /* Basisgröße */
-      --x: 50%;    /* Position */
-      --y: 60%;
-      --dx: 18px;  /* Drift */
-      --dy: 14px;
-      --dur: 26s;  /* Dauer */
-      --del: 0s;   /* Delay */
-
-      position:absolute;
-      left:var(--x); top:var(--y);
-      width:var(--s); height:var(--s);
-      transform:translate(-50%,-50%);
-      border-radius:999px;
-
-      /* Radialer Ember-Glow – nur Markenfarben mit Alpha */
-      background:
-        radial-gradient(circle,
-          rgba(var(--ember-70-rgb), .35) 0%,
-          rgba(var(--ember-70-rgb), .20) 35%,
-          rgba(var(--ember-70-rgb), 0) 70%);
-      box-shadow:
-          0 0 6px 0 rgba(var(--ember-70-rgb), .30),
-          0 0 14px 4px rgba(var(--ember-40-rgb), .22);
-
-      animation:
-        emberFloat var(--dur) ease-in-out var(--del) infinite alternate,
-        emberPulse calc(var(--dur)*.6) ease-in-out var(--del) infinite;
-    }
-    @keyframes emberFloat{
-      from{ transform:translate(calc(-50%), calc(-50%)) }
-      to  { transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) }
-    }
-    @keyframes emberPulse{
-      0%,100% { opacity:.25 }
-      50%     { opacity:.55 }
-    }
-
-    /* 16 Ember-Glows, verteilt */
-    .embers span:nth-child(1){ --x:18%; --y:66%; --s:7px;  --dx:14px; --dy:10px; --dur:24s }
-    .embers span:nth-child(2){ --x:26%; --y:72%; --s:8px;  --dx:16px; --dy:12px; --dur:28s; --del:3s }
-    .embers span:nth-child(3){ --x:34%; --y:64%; --s:6px;  --dx:12px; --dy:9px;  --dur:22s; --del:6s }
-    .embers span:nth-child(4){ --x:42%; --y:76%; --s:9px;  --dx:18px; --dy:14px; --dur:30s; --del:1s }
-    .embers span:nth-child(5){ --x:52%; --y:68%; --s:7px;  --dx:14px; --dy:10px; --dur:26s; --del:5s }
-    .embers span:nth-child(6){ --x:60%; --y:74%; --s:8px;  --dx:16px; --dy:12px; --dur:28s; --del:2s }
-    .embers span:nth-child(7){ --x:68%; --y:66%; --s:6px;  --dx:12px; --dy:9px;  --dur:24s; --del:8s }
-    .embers span:nth-child(8){ --x:76%; --y:72%; --s:8px;  --dx:16px; --dy:12px; --dur:27s; --del:4s }
-    .embers span:nth-child(9){ --x:84%; --y:70%; --s:7px;  --dx:14px; --dy:10px; --dur:25s; --del:7s }
-    .embers span:nth-child(10){--x:22%; --y:82%; --s:7px;  --dx:14px; --dy:10px; --dur:26s; --del:9s }
-    .embers span:nth-child(11){--x:38%; --y:84%; --s:8px;  --dx:16px; --dy:12px; --dur:29s; --del:2s }
-    .embers span:nth-child(12){--x:48%; --y:80%; --s:6px;  --dx:12px; --dy:9px;  --dur:23s; --del:6s }
-    .embers span:nth-child(13){--x:58%; --y:86%; --s:8px;  --dx:16px; --dy:12px; --dur:31s; --del:3s }
-    .embers span:nth-child(14){--x:66%; --y:82%; --s:7px;  --dx:14px; --dy:10px; --dur:27s; --del:5s }
-    .embers span:nth-child(15){--x:74%; --y:84%; --s:6px;  --dx:12px; --dy:9px;  --dur:22s; --del:10s}
-    .embers span:nth-child(16){--x:86%; --y:80%; --s:8px;  --dx:16px; --dy:12px; --dur:28s; --del:1s }
-
-    /* b) Wanderndes Ember-Leuchtband */
-    .ember-band{
-      position:absolute;
-      left:-50%; width:200%;
-      bottom:34vh; height:20vh;
-      pointer-events:none;
-      background:
-        radial-gradient(ellipse at 50% 50%,
-          rgba(var(--ember-40-rgb), .24) 0%,
-          rgba(var(--ember-40-rgb), .12) 45%,
-          rgba(var(--ember-40-rgb), 0) 70%);
-      filter: blur(12px);
-      animation: bandSlide 30s linear infinite;
-      mix-blend-mode:screen;
-    }
-    @keyframes bandSlide{ from{ transform:translateX(0) } to{ transform:translateX(-25%) } }
-
-    /* =========================
-       6) Logo
-       ========================= */
+    /* ========= 5) Logo ========= */
     .logo-mark{
       position:absolute; left:50%; bottom:8vh; transform:translateX(-50%);
-      width:clamp(64px,8vw,96px); pointer-events:none; filter:saturate(.9);
+      width:clamp(64px,8vw,96px); pointer-events:none; filter:saturate(.9)
     }
-    .logo-mark img{ width:100%; height:auto }
+    .logo-mark img{width:100%; height:auto}
 
-    /* =========================
-       7) Reduzierte Bewegung
-       ========================= */
-    @media (prefers-reduced-motion: reduce){
-      .wave, .embers span, .ember-band{ animation: none !important; }
+    /* ========= 6) Reduced Motion ========= */
+    @media (prefers-reduced-motion:reduce){
+      .cloud,.wave{animation:none !important}
     }
   </style>
 </head>
 <body>
   <main class="ss" aria-label="Beruhigender, dynamischer Screensaver">
-    <!-- Grundfläche -->
-    <div class="water-base" aria-hidden="true"></div>
+    <!-- Wolken (Haze) -->
+    <div class="clouds" aria-hidden="true">
+      <!-- Cloud-Layer 1 (Haze 50) -->
+      <div class="cloud c1">
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" role="img" aria-label="Wolkenbank">
+          <path class="shape" d="M0,90 Q120,40 240,90 T480,90 T720,90 T960,90 T1200,90 L1200,200 L0,200 Z"/>
+        </svg>
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,90 Q120,40 240,90 T480,90 T720,90 T960,90 T1200,90 L1200,200 L0,200 Z"/>
+        </svg>
+      </div>
 
-    <!-- Wellen (3 Layer, weich & nahtlos) -->
+      <!-- Cloud-Layer 2 (Haze 80) -->
+      <div class="cloud c2">
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,100 Q150,55 300,100 T600,100 T900,100 T1200,100 L1200,200 L0,200 Z"/>
+        </svg>
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,100 Q150,55 300,100 T600,100 T900,100 T1200,100 L1200,200 L0,200 Z"/>
+        </svg>
+      </div>
+
+      <!-- Cloud-Layer 3 (Haze 100) -->
+      <div class="cloud c3">
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,110 Q160,70 320,110 T640,110 T960,110 T1200,110 L1200,200 L0,200 Z"/>
+        </svg>
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
+          <path class="shape" d="M0,110 Q160,70 320,110 T640,110 T960,110 T1200,110 L1200,200 L0,200 Z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Wasser (Vanguard) -->
+    <div class="water-base" aria-hidden="true"></div>
     <div class="waves" aria-hidden="true">
-      <!-- Layer 1 -->
       <div class="wave w1">
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" role="img" aria-label="Wasserfläche">
           <path class="shape" d="M0,150 Q150,132 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
@@ -223,8 +148,6 @@
           <path class="shape" d="M0,150 Q150,132 300,150 T600,150 T900,150 T1200,150 L1200,240 L0,240 Z"/>
         </svg>
       </div>
-
-      <!-- Layer 2 -->
       <div class="wave w2">
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
           <path class="shape" d="M0,160 Q150,138 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
@@ -233,8 +156,6 @@
           <path class="shape" d="M0,160 Q150,138 300,160 T600,160 T900,160 T1200,160 L1200,240 L0,240 Z"/>
         </svg>
       </div>
-
-      <!-- Layer 3 -->
       <div class="wave w3">
         <svg viewBox="0 0 1200 240" preserveAspectRatio="none" aria-hidden="true">
           <path class="shape" d="M0,170 Q150,148 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
@@ -243,15 +164,6 @@
           <path class="shape" d="M0,170 Q150,148 300,170 T600,170 T900,170 T1200,170 L1200,240 L0,240 Z"/>
         </svg>
       </div>
-    </div>
-
-    <!-- Ember-Dynamik -->
-    <div class="ember-band" aria-hidden="true"></div>
-    <div class="embers" aria-hidden="true">
-      <span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span>
     </div>
 
     <!-- Logo -->
