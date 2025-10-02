@@ -250,16 +250,45 @@
 
       const setRandomTiming = (element) => {
         const duration = MIN_DURATION + Math.random() * (MAX_DURATION - MIN_DURATION);
-        const delay = -Math.random() * duration;
+        const pause = Math.random() * duration;
         element.style.animationDuration = `${duration.toFixed(2)}s`;
-        element.style.animationDelay = `${delay.toFixed(2)}s`;
+        element.style.animationDelay = '0s';
+        return { duration, pause };
+      };
+
+      const pendingTimeouts = new WeakMap();
+
+      const restartAnimation = (flock) => {
+        const timeoutId = pendingTimeouts.get(flock);
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          pendingTimeouts.delete(flock);
+        }
+
+        const { duration, pause } = setRandomTiming(flock);
+
+        flock.style.animation = 'none';
+        flock.style.transform = 'translateX(70%)';
+        void flock.offsetWidth;
+
+        const start = () => {
+          flock.style.animation = `fly ${duration.toFixed(2)}s linear 0s infinite`;
+          pendingTimeouts.delete(flock);
+        };
+
+        if (pause > 0) {
+          const id = setTimeout(start, pause * 1000);
+          pendingTimeouts.set(flock, id);
+        } else {
+          start();
+        }
       };
 
       const flocks = document.querySelectorAll('.flock');
       flocks.forEach((flock) => {
-        setRandomTiming(flock);
+        restartAnimation(flock);
         flock.addEventListener('animationiteration', () => {
-          setRandomTiming(flock);
+          restartAnimation(flock);
         });
       });
     })();
