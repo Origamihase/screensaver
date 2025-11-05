@@ -42,7 +42,14 @@
       );
       overflow:hidden;
     }
-    .scene{position:fixed; inset:0; display:block; isolation:isolate}
+    .scene{
+      position:fixed;
+      inset:0;
+      display:block;
+      isolation:isolate;
+      height:100%;
+      min-height:100vh;
+    }
 
     .meadow-base{z-index:1}
     .hills{z-index:2}
@@ -53,7 +60,9 @@
     /* ========= 3) Wolken (HAZE) ========= */
     .clouds{
       position:absolute; left:0; right:0; top:0;
-      height:42vh; pointer-events:none;
+      height:42%;
+      height:42vh;
+      pointer-events:none;
     }
     .cloud{
       position:absolute; left:0; top:0;
@@ -67,9 +76,9 @@
     .cloud svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision}
     .cloud .shape{fill: currentColor}
 
-    .c1{ color:var(--haze-50); height:18vh; top:10vh; filter:blur(14px); animation:drift1 110s linear infinite }
-    .c2{ color:var(--haze-80); height:16vh; top:16vh; filter:blur(12px); animation:drift2 85s  linear infinite reverse }
-    .c3{ color:var(--haze-100);height:14vh; top:22vh; filter:blur(10px); animation:drift3 70s  linear infinite }
+    .c1{ color:var(--haze-50); height:18%; height:18vh; top:10%; top:10vh; filter:blur(14px); animation:drift1 110s linear infinite }
+    .c2{ color:var(--haze-80); height:16%; height:16vh; top:16%; top:16vh; filter:blur(12px); animation:drift2 85s  linear infinite reverse }
+    .c3{ color:var(--haze-100);height:14%; height:14vh; top:22%; top:22vh; filter:blur(10px); animation:drift3 70s  linear infinite }
 
     @keyframes drift1{from{transform:translateX(0)} to{transform:translateX(-50%)}}
     @keyframes drift2{from{transform:translateX(0)} to{transform:translateX(-50%)}}
@@ -77,14 +86,14 @@
 
     /* ========= 4) Wiese (VANGUARD) ========= */
     .meadow-base{
-      position:absolute; left:0; right:0; bottom:0; height:60vh; pointer-events:none;
+      position:absolute; left:0; right:0; bottom:0; height:60%; height:60vh; pointer-events:none;
       background: linear-gradient(to bottom,
         var(--vanguard-30) 0%,
         var(--vanguard-70) 55%,
         var(--vanguard-100) 100%
       );
     }
-    .hills{ position:absolute; left:0; right:0; bottom:0; height:60vh; pointer-events:none }
+    .hills{ position:absolute; left:0; right:0; bottom:0; height:60%; height:60vh; pointer-events:none }
     .hill{
       position:absolute; left:0; bottom:0;
       width:200%; display:flex; will-change:transform;
@@ -93,9 +102,9 @@
     .hill svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision}
     .hill .shape{fill: currentColor}
 
-    .h1{ color:var(--vanguard-30); height:42vh; bottom:18vh; opacity:.34; animation:hill1 38s linear infinite }
-    .h2{ color:var(--vanguard-70); height:48vh; bottom:10vh; opacity:.30; animation:hill2 52s linear infinite reverse }
-    .h3{ color:var(--vanguard-100);height:60vh; bottom: 0;  opacity:.26; animation:hill3 70s linear infinite }
+    .h1{ color:var(--vanguard-30); height:42%; height:42vh; bottom:18%; bottom:18vh; opacity:.34; animation:hill1 38s linear infinite }
+    .h2{ color:var(--vanguard-70); height:48%; height:48vh; bottom:10%; bottom:10vh; opacity:.30; animation:hill2 52s linear infinite reverse }
+    .h3{ color:var(--vanguard-100);height:60%; height:60vh; bottom: 0;  opacity:.26; animation:hill3 70s linear infinite }
 
     @keyframes hill1{from{transform:translateX(0)} to{transform:translateX(-50%)}}
     @keyframes hill2{from{transform:translateX(0)} to{transform:translateX(-50%)}}
@@ -105,12 +114,12 @@
     .birds{ position:absolute; inset:0; pointer-events:none }
     .flock{
       position:absolute; left:-40%; width:200%;
-      height:12vh; display:block;
+      height:12%; height:12vh; display:block;
       animation:fly 32s linear infinite;
     }
-    .flock.far   { top:10vh; animation-duration:50s }   /* hell */
-    .flock.mid   { top:16vh; animation-duration:38s }   /* mittel */
-    .flock.near  { top:22vh; animation-duration:30s }   /* dunkel */
+    .flock.far   { top:10%; top:10vh; animation-duration:50s }   /* hell */
+    .flock.mid   { top:16%; top:16vh; animation-duration:38s }   /* mittel */
+    .flock.near  { top:22%; top:22vh; animation-duration:30s }   /* dunkel */
 
     @keyframes fly{
       from{ transform:translateX(70%) }
@@ -133,7 +142,7 @@
     .flock svg:nth-child(8){ left:84%; top:18%; transform:scale(0.90) }
     /* ========= 6) Logo ========= */
     .logo-mark{
-      position:absolute; left:50%; bottom:8vh; transform:translateX(-50%);
+      position:absolute; left:50%; bottom:8%; bottom:8vh; transform:translateX(-50%);
       width:clamp(64px,8vw,96px);
       pointer-events:none; filter:saturate(.9);
     }
