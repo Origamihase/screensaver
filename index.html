@@ -277,38 +277,20 @@
         const durationMin = Math.max(hasValidRange ? min : 18, cssBaseline);
         const durationMax = Math.max(hasValidRange ? max : 28, durationMin + 1);
         const duration = durationMin + Math.random() * (durationMax - durationMin);
-        const pause = Math.random() * duration;
+        const offset = Math.random() * duration * 0.6;
         element.style.animationDuration = `${duration.toFixed(2)}s`;
-        element.style.animationDelay = '0s';
-        return { duration, pause };
+        element.style.animationDelay = `-${offset.toFixed(2)}s`;
+        return { duration };
       };
 
-      const pendingTimeouts = new WeakMap();
-
       const restartAnimation = (flock) => {
-        const timeoutId = pendingTimeouts.get(flock);
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-          pendingTimeouts.delete(flock);
-        }
-
-        const { duration, pause } = setRandomTiming(flock);
+        const { duration } = setRandomTiming(flock);
 
         flock.style.animation = 'none';
         flock.style.transform = 'translateX(70%)';
         void flock.offsetWidth;
 
-        const start = () => {
-          flock.style.animation = `fly ${duration.toFixed(2)}s linear 0s infinite`;
-          pendingTimeouts.delete(flock);
-        };
-
-        if (pause > 0) {
-          const id = setTimeout(start, pause * 1000);
-          pendingTimeouts.set(flock, id);
-        } else {
-          start();
-        }
+        flock.style.animation = `fly ${duration.toFixed(2)}s linear 0s infinite`;
       };
 
       const flocks = document.querySelectorAll('.flock');
