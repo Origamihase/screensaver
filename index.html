@@ -72,8 +72,7 @@
       filter:blur(10px);
       opacity:.9;
     }
-    .cloud svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision}
-    .cloud .shape{fill: currentColor}
+    .cloud svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision; fill:currentColor}
 
     .c1{ color:var(--haze-50); height:18%; height:18vh; top:10%; top:10vh; filter:blur(14px); animation:drift 110s linear infinite }
     .c2{ color:var(--haze-80); height:16%; height:16vh; top:16%; top:16vh; filter:blur(12px); animation:drift 85s  linear infinite reverse }
@@ -95,8 +94,7 @@
       position:absolute; left:0; bottom:0;
       width:200%; display:flex; will-change:transform;
     }
-    .hill svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision}
-    .hill .shape{fill: currentColor}
+    .hill svg{width:50%; height:100%; flex:0 0 50%; shape-rendering:geometricPrecision; fill:currentColor}
 
     .h1{ color:var(--vanguard-30); height:42%; height:42vh; bottom:18%; bottom:18vh; opacity:.34; animation:hill 38s linear infinite }
     .h2{ color:var(--vanguard-70); height:48%; height:48vh; bottom:10%; bottom:10vh; opacity:.30; animation:hill 52s linear infinite reverse }
@@ -152,66 +150,81 @@
   </style>
 </head>
 <body>
+  <!-- Wiederverwendbare Pfade: 1× definiert, mehrfach via <use> referenziert. -->
+  <svg aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute" tabindex="-1">
+    <defs>
+      <symbol id="bird" viewBox="0 0 24 12">
+        <path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/>
+      </symbol>
+      <symbol id="cloud1" viewBox="0 0 1200 160">
+        <path d="M0,76 C100,36 200,36 300,76 S500,116 600,76 S900,36 1200,76 L1200,160 L0,160 Z"/>
+      </symbol>
+      <symbol id="cloud2" viewBox="0 0 1200 160">
+        <path d="M0,84 C130,48 230,48 330,84 S540,120 660,84 S960,48 1200,84 L1200,160 L0,160 Z"/>
+      </symbol>
+      <symbol id="cloud3" viewBox="0 0 1200 160">
+        <path d="M0,92 C150,62 250,62 350,92 S560,122 680,92 S980,62 1200,92 L1200,160 L0,160 Z"/>
+      </symbol>
+      <symbol id="hill1" viewBox="0 0 1200 280">
+        <path d="M0,160 C120,120 180,120 300,160 S480,200 600,160 S900,120 1200,160 L1200,280 L0,280 Z"/>
+      </symbol>
+      <symbol id="hill2" viewBox="0 0 1200 280">
+        <path d="M0,170 C140,130 220,130 360,170 S560,210 720,170 S1020,130 1200,170 L1200,280 L0,280 Z"/>
+      </symbol>
+      <symbol id="hill3" viewBox="0 0 1200 280">
+        <path d="M0,180 C160,140 260,140 420,180 S640,220 860,180 S1080,140 1200,180 L1200,280 L0,280 Z"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <main class="scene" aria-label="Beruhigender, dynamischer Screensaver">
     <!-- Wolken (HAZE) -->
     <div class="clouds" aria-hidden="true">
       <div class="cloud c1">
-        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" role="img" aria-label="Wolkenbank">
-          <path class="shape" d="M0,76 C100,36 200,36 300,76 S500,116 600,76 S900,36 1200,76 L1200,160 L0,160 Z"/>
-        </svg>
-        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,76 C100,36 200,36 300,76 S500,116 600,76 S900,36 1200,76 L1200,160 L0,160 Z"/>
-        </svg>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" role="img" aria-label="Wolkenbank"><use href="#cloud1"/></svg>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true"><use href="#cloud1"/></svg>
       </div>
       <div class="cloud c2">
-        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,84 C130,48 230,48 330,84 S540,120 660,84 S960,48 1200,84 L1200,160 L0,160 Z"/>
-        </svg>
-        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,84 C130,48 230,48 330,84 S540,120 660,84 S960,48 1200,84 L1200,160 L0,160 Z"/>
-        </svg>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true"><use href="#cloud2"/></svg>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true"><use href="#cloud2"/></svg>
       </div>
       <div class="cloud c3">
-        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,92 C150,62 250,62 350,92 S560,122 680,92 S980,62 1200,92 L1200,160 L0,160 Z"/>
-        </svg>
-        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,92 C150,62 250,62 350,92 S560,122 680,92 S980,62 1200,92 L1200,160 L0,160 Z"/>
-        </svg>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true"><use href="#cloud3"/></svg>
+        <svg viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true"><use href="#cloud3"/></svg>
       </div>
     </div>
 
     <!-- Vögel (CHARCOAL) – V-Form -->
     <div class="birds" aria-hidden="true">
       <div class="flock far">
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
       </div>
       <div class="flock mid">
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
       </div>
       <div class="flock near">
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
-        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><path d="M0,2 L6,10 L12,2 L10,2 L6,7 L2,2 Z"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
+        <svg class="birdV" viewBox="0 0 24 12" aria-hidden="true"><use href="#bird"/></svg>
       </div>
     </div>
 
@@ -219,28 +232,16 @@
     <div class="meadow-base" aria-hidden="true"></div>
     <div class="hills" aria-hidden="true">
       <div class="hill h1">
-        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" role="img" aria-label="Hügel">
-          <path class="shape" d="M0,160 C120,120 180,120 300,160 S480,200 600,160 S900,120 1200,160 L1200,280 L0,280 Z"/>
-        </svg>
-        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,160 C120,120 180,120 300,160 S480,200 600,160 S900,120 1200,160 L1200,280 L0,280 Z"/>
-        </svg>
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" role="img" aria-label="Hügel"><use href="#hill1"/></svg>
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true"><use href="#hill1"/></svg>
       </div>
       <div class="hill h2">
-        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,170 C140,130 220,130 360,170 S560,210 720,170 S1020,130 1200,170 L1200,280 L0,280 Z"/>
-        </svg>
-        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,170 C140,130 220,130 360,170 S560,210 720,170 S1020,130 1200,170 L1200,280 L0,280 Z"/>
-        </svg>
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true"><use href="#hill2"/></svg>
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true"><use href="#hill2"/></svg>
       </div>
       <div class="hill h3">
-        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,180 C160,140 260,140 420,180 S640,220 860,180 S1080,140 1200,180 L1200,280 L0,280 Z"/>
-        </svg>
-        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true">
-          <path class="shape" d="M0,180 C160,140 260,140 420,180 S640,220 860,180 S1080,140 1200,180 L1200,280 L0,280 Z"/>
-        </svg>
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true"><use href="#hill3"/></svg>
+        <svg viewBox="0 0 1200 280" preserveAspectRatio="none" aria-hidden="true"><use href="#hill3"/></svg>
       </div>
     </div>
 
