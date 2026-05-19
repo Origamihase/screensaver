@@ -278,8 +278,6 @@
         const durationMax = Math.max(hasValidRange ? max : 28, durationMin + 1);
         const duration = durationMin + Math.random() * (durationMax - durationMin);
         const pause = Math.random() * duration;
-        element.style.animationDuration = `${duration.toFixed(2)}s`;
-        element.style.animationDelay = '0s';
         return { duration, pause };
       };
 
